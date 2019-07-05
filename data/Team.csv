@@ -1,0 +1,31 @@
+TeamID,Name,VenueID,TeamCode,Abbreviation,TeamName,LocationName,LeagueID,DivisionID
+133,Oakland Athletics,10,oak,OAK,Athletics,Oakland,103,200
+134,Pittsburgh Pirates,31,pit,PIT,Pirates,Pittsburgh,104,205
+135,San Diego Padres,2680,sdn,SD,Padres,San Diego,104,203
+136,Seattle Mariners,680,sea,SEA,Mariners,Seattle,103,200
+137,San Francisco Giants,2395,sfn,SF,Giants,San Francisco,104,203
+138,St. Louis Cardinals,2889,sln,STL,Cardinals,St. Louis,104,205
+139,Tampa Bay Rays,12,tba,TB,Rays,Tampa Bay,103,201
+140,Texas Rangers,13,tex,TEX,Rangers,Arlington,103,200
+141,Toronto Blue Jays,14,tor,TOR,Blue Jays,Toronto,103,201
+142,Minnesota Twins,3312,min,MIN,Twins,Minneapolis,103,202
+143,Philadelphia Phillies,2681,phi,PHI,Phillies,Philadelphia,104,204
+144,Atlanta Braves,4705,atl,ATL,Braves,Atlanta,104,204
+145,Chicago White Sox,4,cha,CWS,White Sox,Chicago,103,202
+146,Miami Marlins,4169,mia,MIA,Marlins,Miami,104,204
+147,New York Yankees,3313,nya,NYY,Yankees,Bronx,103,201
+158,Milwaukee Brewers,32,mil,MIL,Brewers,Milwaukee,104,205
+108,Los Angeles Angels,1,ana,LAA,Angels,Anaheim,103,200
+109,Arizona Diamondbacks,15,ari,ARI,D-backs,Phoenix,104,203
+110,Baltimore Orioles,2,bal,BAL,Orioles,Baltimore,103,201
+111,Boston Red Sox,3,bos,BOS,Red Sox,Boston,103,201
+112,Chicago Cubs,17,chn,CHC,Cubs,Chicago,104,205
+113,Cincinnati Reds,2602,cin,CIN,Reds,Cincinnati,104,205
+114,Cleveland Indians,5,cle,CLE,Indians,Cleveland,103,202
+115,Colorado Rockies,19,col,COL,Rockies,Denver,104,203
+116,Detroit Tigers,2394,det,DET,Tigers,Detroit,103,202
+117,Houston Astros,2392,hou,HOU,Astros,Houston,103,200
+118,Kansas City Royals,7,kca,KC,Royals,Kansas City,103,202
+119,Los Angeles Dodgers,22,lan,LAD,Dodgers,Los Angeles,104,203
+120,Washington Nationals,3309,was,WSH,Nationals,Washington,104,204
+121,New York Mets,3289,nyn,NYM,Mets,New York,104,204

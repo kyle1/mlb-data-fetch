@@ -1,0 +1,947 @@
+VenueID,Name
+3389,Dickey-Stephens Park
+3529,Duane Banks Field
+4715,First Tennessee Park
+4270,Generic VST
+3832,AL City
+3833,NL City
+3834,Goodyear Ballpark
+4611,One Hub Stadium Powered by Optus
+4700,Fowler Park and Cunningham Field
+5223,KeyArena at Seattle Center
+5227,Oncenter War Memorial Arena
+4589,Sydney Cricket Ground
+2866,FirstEnergy Park
+2929,Estadio Alberto Romo Chavez
+4510,Estadio Sonora
+4469,Alamodome
+4350,Suplizio Field
+4389,Estadio Nacional Rod Carew
+2913,Estadio Jose Perez Colmenares
+4824,Estadio Latinoamericano
+4831,Henley Field
+3410,Parque la Junta
+3991,Taichung Intercontinental Baseball Stadium
+4669,Southwest University Park
+4670,BB&T Ballpark
+4109,PK Park
+3909,Estadio Adolfo Lopez Mateos
+3929,Estadio De Beisbol Beto Avila
+4569,Bobby Mattick Complex
+5155,BMO Field
+5156,Cambria County War Memorial Arena
+5157,Dunkin' Donuts Center
+5158,Essar Centre
+5159,FirstOntario Centre
+5160,Hartwall Arena
+5161,Investors Group Field
+5162,Kal Tire Place
+5163,Lakeview Arena
+5164,Meridian Centre
+5165,MGM Grand Garden Arena
+5166,Mile One Centre
+5167,Pegula Ice Arena
+5168,PPL Center
+5169,Rabobank Arena
+5170,SaskTel Centre
+5171,Scandinavium
+5172,Scotiabank Centre
+5173,Sprint Center
+5174,Tate Rink
+5175,TCF Bank Stadium
+5176,The O2 Arena
+5177,The Q Centre
+5178,T-Mobile Arena
+5179,Videotron Centre
+5180,Yubileyny Sports Palace
+5295,The Battery Atlanta
+5315,Max Bishop Stadium
+4410,Merlin Street Oval
+2869,Estadio Hermanos Serdan
+4169,Marlins Park
+5185,Budweiser Gardens
+4985,Dunkin' Donuts Park
+5320,Parque Domingo Santana
+5321,Estadio Francisco Villa
+1,Angel Stadium
+2,Oriole Park at Camden Yards
+3,Fenway Park
+4,Guaranteed Rate Field
+7,Kauffman Stadium
+10,Oakland Coliseum
+12,Tropicana Field
+14,Rogers Centre
+15,Chase Field
+16,Turner Field
+20,Hard Rock Stadium
+22,Dodger Stadium
+401,TBD
+680,T-Mobile Park
+2392,Minute Maid Park
+2394,Comerica Park
+2395,Oracle Park
+2397,Tokyo Dome
+2500,Tempe Diablo Stadium
+2503,Cashman Field
+2504,Champion Stadium
+2506,City of Palms Park
+2507,Hohokam Stadium
+2508,Ed Smith Stadium
+2510,Estadio Jose Bernardo Perez
+2511,Publix Field at Joker Marchant Stadium
+2512,UPMC Park
+2514,Osceola County Stadium
+2516,The Diamond
+2518,American Family Fields of Phoenix
+2520,Roger Dean Chevrolet Stadium
+2523,George M. Steinbrenner Field
+2525,Jack Russell Memorial Stadium
+2526,LECOM Park
+2527,Parque Foro Sol
+2528,Dell Diamond
+2530,Peoria Stadium
+2534,Charlotte Sports Park
+2535,Hiram Bithorn Stadium
+2536,Dunedin Stadium
+31,PNC Park
+2541,Durham Bulls Athletic Park
+4489,Palm Meadows Baseball Facility
+4490,Albert Park
+4509,Johnson Stadium at Doubleday Field
+3469,Appalachian Power Park
+3470,Melaleuca Field
+2542,AutoZone Park
+2603,Surprise Stadium
+2623,Regions Park
+2625,Five County Stadium
+2640,Chukchansi Park
+2680,Petco Park
+2681,Citizens Bank Park
+2682,AT&T Field
+2683,Isotopes Park
+2513,Space Coast Stadium
+2517,Holman Stadium
+2524,Phoenix Municipal Stadium
+2529,Raley Field
+2532,Scottsdale Stadium
+2540,Joseph P. Riley Jr. Ballpark
+5,Progressive Field
+13,Globe Life Park in Arlington
+24,Olympic Stadium
+32,Miller Park
+2602,Great American Ball Park
+2700,Spectrum Field
+2701,Estadio de Beisbol Monterrey
+2519,CenturyLink Sports Complex Fields
+17,Wrigley Field
+2501,Kino Veterans Memorial Stadium
+19,Coors Field
+2722,Hammons Field
+2723,First National Bank Field
+2724,Louisville Slugger Field
+2725,NelsonCorp Field
+2726,Dan Daniel Memorial Park
+2727,Whitaker Bank Ballpark
+2728,San Manuel Stadium
+2729,Arthur W. Perdue Stadium
+2730,Avista Stadium
+2731,Banner Island Ballpark
+2733,Peoples Natural Gas Field
+2734,Bowen Field
+2735,BB&T Ballpark
+2736,Burlington Athletic Stadium
+2738,Eastwood Field
+2739,Calfee Park
+2740,Canal Park
+2742,Carl Barger Baseball Complex
+2743,Carpenter Complex
+3429,Fluor Field at the West End
+4629,Sloan Park
+3049,Estadio Quisqueya Juan Marichal
+3051,Estadio Cibao
+3054,Estadio Tetelo Vargas
+3055,Estadio Francisco Micheli
+3057,Estadio Julian Javier
+3569,Bowling Green Ballpark
+5290,Adelaide Shores Baseball Complex
+2744,Centennial Field
+2745,Cheney Stadium
+2747,TicketReturn.com Field
+2748,Dehler Park
+2749,FNB Field
+2750,Community Field
+2753,Boyce Cox Field
+2754,Jackie Robinson Training Complex
+2755,Dr Pepper Ballpark
+2756,Sahlen Field
+2757,Dutchess Stadium
+2758,Dwyer Stadium
+2759,Classic Park
+2760,Edward A. LeLacheur Park
+2761,Wake Forest Baseball Park
+2762,Funko Field
+2763,Falcon Park
+2764,Intimidators Stadium
+2765,Fifth Third Ballpark
+2766,Fifth Third Field
+2767,Fifth Third Field
+2768,Security Bank Ballpark
+2769,FirstEnergy Stadium
+2770,Lew Wolff Training Complex
+2771,Fox Cities Stadium
+2772,Smith's Ballpark
+2773,Frontier Field
+2774,Northwest Federal Field
+2775,Gene Autry Park
+2777,Grainger Stadium
+2778,Grayson Stadium
+2779,Hadlock Field
+2780,Hank Aaron Stadium
+2781,Harbor Park
+2782,Nymeo Field
+2783,Herschel Greer Stadium
+2784,TVA Credit Union Ballpark
+2785,Hunnicutt Field
+2786,Hunter Wright Stadium
+2787,Jackie Robinson Ballpark
+2788,Joe O'Brien Field
+2789,Joe W. Davis Municipal Stadium
+2790,Modern Woodmen Park
+2791,John Thurman Field
+2792,Joseph L. Bruno Stadium
+2793,Frawley Stadium
+2794,Kindrick Legion Field
+2795,MCU Park
+2796,L.P. Frans Stadium
+2797,PNC Field
+2799,The Hangar
+2801,Centene Stadium at Legion Park
+2802,Lindquist Field
+2803,Calvin Falwell Field
+2805,Maryvale Baseball Complex
+2806,Heritage Field
+2807,McCormick Field
+2808,McCoy Stadium
+3789,Greater Nevada Field
+3749,Parque Yldefonso Sola Morales
+3750,Estadio Isidoro Cholo Garcia
+3751,Estadio Francisco Paquito Montaner
+3790,Parkview Field
+5186,Webster Bank Arena
+2889,Busch Stadium
+3122,Estadio Roberto Clemente Walker
+3230,Coca-Cola Park
+3309,Nationals Park
+3312,Target Field
+3313,Yankee Stadium
+3949,Rickwood Field
+3969,Estadio Nuevo Laredo
+3970,Huntington Park
+5300,David L. Lawrence Convention Center
+2810,Memorial Stadium
+2813,Trustmark Park
+2814,Montgomery Riverwalk Stadium
+2815,Excite Ballpark
+2816,Municipal Stadium
+2817,Nat Bailey Stadium
+2818,Nelson Wolff Stadium
+2819,New Britain Stadium
+2820,NYSEG Stadium
+2821,Dozer Park
+2822,Cooley Law School Stadium
+2823,NBT Bank Stadium
+2824,Papago Sports Complex
+2825,Home of the OWLZ
+2826,Gesa Stadium
+2827,Northwestern Medicine Field
+2828,Pioneer Park
+2829,Pirate City Complex
+2830,Ogren Park Allegiance Field
+2831,Pohlman Field
+2832,Prince George's Stadium
+2833,The Ballpark at Jackson
+2835,Recreation Park
+2836,Richmond County Bank Ballpark
+2837,Leidos Field at Ripken Stadium
+2839,Russell E. Diethrick Jr. Park
+2840,Haley Toyota Field
+2841,Sam Lynn Ballpark
+2842,ARM & HAMMER Park
+2843,Chickasaw Bricktown Ballpark
+2844,Principal Park
+2845,Dodd Stadium
+2846,UCHealth Park
+2848,Smokies Stadium
+2849,St. Lucie Sports Complex
+2850,Four Winds Field
+2851,State Mutual Stadium
+2852,Baseball Grounds of Jacksonville
+2853,The Diamond
+2854,LoanMart Field
+2855,Tigertown
+2856,First Data Field
+2857,Perfect Game Field
+2858,Victory Field
+2859,Volcanoes Stadium
+2861,Whataburger Field
+2862,CenturyLink Sports Complex
+2864,Yankee Complex
+2865,Shrine on Airline
+2868,Northeast Delta Dental Stadium
+441,Default Central European (G)
+3189,Dow Diamond
+3289,Citi Field
+4271,Werner Park
+4309,JetBlue Park
+3652,Armin-Wolf Baseball Arena
+3769,Parque Deportivo Colon
+3809,Camelback Ranch
+3810,Coolray Field
+4089,BB&T Ballpark
+4209,Perth Harley-Davidson Ballpark
+4210,Blacktown International Sportspark
+4211,Melbourne Ballpark
+4212,MIT Narrabundah Ballpark
+4213,Norwood Oval
+4214,RNA Showgrounds
+4249,Salt River Fields at Talking Stick
+4369,Estadio Resurgimiento
+4549,Thomas Stadium
+2949,Parque Nelson Barrera Romellon
+2950,Estadio Monclova
+2951,Parque Lic. Eduardo Vasconcelos
+2953,Parque Francisco I. Madero
+2955,Parque Centenario 27 de Febrero
+2956,Estadio de la Revolucion
+2957,Estadio Chevron
+2958,Estadio Universitario Beto Avila
+2959,Parque Kukulkan
+3029,Estadio Universitario
+3030,Estadio Alfonso Carrasquel
+3031,Estadio Luis Aparicio
+3032,Estadio Antonio Herrera Gutierrez
+3069,Francisco Carranza Limon
+3070,Hector Espino
+3071,General Angel Flores
+3072,Tomas Oroz Gaytan
+3073,Teodoro Mariscal
+3074,Emilio Ibarra Almada
+3075,Manuel Ciclon Echeverria
+3076,Estadio B-Air
+4429,Ron Tonkin Field
+4449,Estadio Mariano 'Mini' Meaux
+4450,Estadio Municipal Pedro Roman Melendez
+2912,Medlar Field at Lubrano Park
+5250,Allstate Arena
+5251,Blue Cross Arena
+5252,BMO Harris Bank Center
+5253,Bojangles' Coliseum
+5254,Citizens Business Bank Arena
+5255,Giant Center
+5256,H-E-B Center at Cedar Park
+5257,MassMutual Center
+5258,Mohegan Sun Arena at Casey Plaza
+5259,Ricoh Coliseum
+5260,Stockton Arena
+5261,Times Union Center
+5262,Tucson Convention Center
+5263,Utica Memorial Auditorium
+5264,UW-Milwaukee Panther Arena
+5265,Valley View Casino Center
+5266,Van Andel Arena
+5267,Veterans Memorial Arena
+5268,Wells Fargo Arena
+3558,USA Baseball National Training Complex
+3089,Kyocera Dome
+3090,Fukuoka Yafuoku! Dome
+3209,Estadio 18 de Marzo de 1938
+4149,ONEOK Field
+4349,XinZhuang Stadium
+3329,Arvest Ballpark
+3349,Stadium Nueva Esparta
+4329,Blue Wahoos Stadium
+4710,Estadio Charros de Jalisco
+4970,Estadio de Beisbol 'Fray Nano'
+4529,Regions Field
+5240,Estadio Luis A. Canena Marquez
+5015,Air Canada Centre
+5017,Amalie Arena
+5019,American Airlines Center
+5026,Barclays Center
+5027,BB&T Center
+5028,Bell Centre
+5030,Bridgestone Arena
+5031,Canadian Tire Centre
+5034,PPG Paints Arena
+5039,KeyBank Center
+5043,Gila River Arena
+5046,Honda Center
+5047,Joe Louis Arena
+5054,Madison Square Garden
+5058,Bell MTS Place
+5059,Nationwide Arena
+5064,Pepsi Center
+5066,PNC Arena
+5067,Prudential Center
+5072,Northlands Coliseum
+5073,Rogers Arena
+5074,SAP Center
+5075,Scotiabank Saddledome
+5076,Scottrade Center
+5077,Sleep Train Arena
+5081,Staples Center
+5085,TD Garden
+4965,Monongalia County Ballpark
+4990,Estadio BBVA Bancomer
+4705,SunTrust Park
+5092,United Center
+5094,Verizon Center
+5096,Wells Fargo Center
+5098,Xcel Energy Center
+5100,Rogers Place
+5280,Golden 1 Center
+5305,Kansas City Convention Center
+4980,Segra Park
+4995,Estadio de los Tomateros
+4977,Giants Baseball Complex
+4711,Koshien Stadium
+4712,Sapporo Dome
+4713,Okinawa Cellular Stadium
+4960,MGM Park
+5145,Little Caesars Arena
+5150,Gocheok Sky Dome
+5270,Duke Energy Convention Center
+5000,FITTEAM Ballpark of the Palm Beaches
+5010,Fort Bragg Field
+5275,Hank McCamish Pavilion
+5276,Mohegan Sun Arena
+5277,College Park Center
+5285,Jim Perry Stadium
+5245,Nuevo Estadio Yaquis
+5376,Auckland-New Zealand
+5435,IMG Academy
+5430,Magic Box
+5355,Las Vegas Ballpark
+5345,SRP Park
+5360,Sliwa Stadium
+5350,Maestri Stadium
+5351,Wesley Barrow Stadium
+5370,Texas Live!
+5385,Mazda Zoom Zoom Stadium
+5335,Estadio Evaristo 'Varo' Roldan
+5336,Estadio Hermanos Marrero
+5400,SEGRA Stadium
+5381,London Stadium
+5410,New Worcester Stadium
+5425,Fredericksburg Baseball Stadium
+5415,Hodgetown
+5390,Foxwoods Winter Weekend
+5416,Regency Furniture Stadium
+5417,BB&T Point Ballpark
+5418,TD Bank Ballpark
+5419,Bethpage Ballpark
+5420,Clipper Magazine Stadium
+5421,Constellation Field
+5422,PeoplesBank Park
+5375,Geelong-Korea
+5365,TD Ameritrade Park
+5395,Nagoya Dome
+5405,Blue Lake Sports Park
+5380,CoolToday Park
+5340,Estadio Alfredo Harp Helu
+5330,Uni-Trade Stadium
+3015,Les Murakami Stadium
+3016,Hans L'Orange Field
+3729,FIU Baseball Stadium
+5190,Charlotte Coliseum
+5191,Memorial Coliseum
+5192,Edgerton Park Arena
+5193,Rochester Community War Mem
+5194,Cincinnati Gardens
+5195,Municipal Auditorium
+5196,ARCO Arena
+5197,Dallas Memorial Auditorium
+5198,Tarrant County Convention Center
+5199,HemisFair Arena
+5200,Municipal Auditorium
+5201,Salt Palace
+5202,International Amphitheatre
+5203,Baltimore Civic Center
+5204,Cleveland Arena
+5205,Coliseum at Richfield
+5206,Denver Arena Auditorium
+5207,North Side High School
+5208,War Memorial Coliseum
+5209,Olympic Stadium
+5210,Cobo Arena
+5211,Pontiac Silverdome
+5212,Philadelphia Arena
+5213,Municipal Auditorium
+5214,San Francisco Civic Auditorium
+5215,San Diego Sports Arena
+5216,Hofheinz Pavilion
+5217,Compaq Center
+5218,Indiana State Fairgrounds Coliseum
+5219,Market Square Arena
+5220,Minneapolis Auditorium
+5221,Minneapolis Armory
+5222,Pyramid Arena
+5224,Tacoma Dome
+5225,Amway Arena
+5226,State Fair Coliseum
+5228,Arizona Veterans Memorial Coliseum
+5229,Wharton Fieldhouse
+5230,MECCA Arena
+5231,Kiel Auditorium
+5232,Alexander Coliseum
+5233,Teaneck Armory
+5234,Long Island Arena
+5235,Island Garden
+5236,Rutgers Athletic Center
+5237,Izod Center
+3269,Gezer Field
+3270,Sportek Baseball Field
+3271,Yarkon Sports Complex
+3512,Wukesong Baseball Stadium
+4720,Artillery Park
+4721,Athletic Park
+4722,Bay Street Ball Grounds
+4723,Bill Wigle Field
+4724,Bob Hoffman Stadium
+4725,Browning-Leonard Park
+4726,Chemeteka Community College
+4727,Clark Field
+4728,Clyde Allen Field
+4729,Devereaux Meadow
+4730,Dobyns-Bennett High School
+4732,Durkee Field
+4733,Island Field
+4734,Jennings Stadium
+4735,John Affleck Park
+4736,Johnson Field
+4737,Lauer's Park
+4738,Lawrence Stadium
+4739,League Park
+4740,Marion High School
+4741,Max Hess Stadium
+4742,McConnell Field
+4743,McNearney Stadium
+4744,Municipal Stadium
+4745,Paul G. Fyffe Field
+4746,Robbins Park
+4747,Schepps Palm Field
+4748,Scranton Stadium
+4749,Senior High Stadium
+4750,Stade Bellevue
+4751,Stumpf Field
+4752,Tech Field
+4753,Texas League Park
+4754,Tullar Field
+4755,Withers Field
+4756,Withers Field
+4757,Ainsworth Field
+4758,Al Lopez Field
+4759,Albuquerque Sports Stadium
+4760,All-Sports Stadium
+4761,Alumni Field
+4762,Alumni Field
+4763,Anderson Memorial Stadium
+4764,Angels Stadium
+4765,Athletic Park
+4766,Athletic Park
+4767,Baseball City Stadium
+4768,Beehive Field
+4769,Bernie Arbour Memorial stadium
+4770,Bethel Park
+4771,Borchert Field
+4772,Bosse Field
+4773,Bosse Field
+4774,Bringhurst Field
+4775,Brooks Field
+4776,Buffalo Stadium
+4777,Bulkeley Stadium
+4778,Burlington Athletic Park
+4779,Burnett Field
+4780,Burns Stadium
+4781,Bush Field
+4783,Cardinal Field
+4784,Casey Field
+4785,Coastal Carolina College Stadium
+4786,City Park Stadium
+4787,Civic Stadium
+4788,Crockett Park
+4789,Cobb Field
+4790,Colburn Park
+4791,College of Staten Island Baseball Complex
+4792,College Park
+4793,Community Park
+4794,Conrad Park
+4795,Corning Memorial Stadium
+4796,Cranberry Ballpark
+4797,Danville Stadium
+4798,DeLorimier Downs
+4799,Derks Field
+4800,Disch Field
+4801,Donovan Stadium
+4803,Duncan Park
+4804,Dunn Field
+4805,Durham Athletic Park
+4806,East Field
+4807,Edmonds Field
+4808,Engel Stadium
+4809,Euless Park
+4810,Fair Grounds Field
+4811,Fair Grounds Park
+4812,Fans Field
+4813,Ferris Field
+4814,Finch Field
+4815,Fiscalini Field
+4816,Fleming Stadium
+4818,Four Mile Run Park
+4819,Giants Field
+4820,Gill Stadium
+4821,Gilmore Field
+4823,Goodland Field
+4825,Haliwell Park
+4826,Peninsula War Memorial Stadium
+4827,Hartwell Field
+4828,Hawkins Stadium
+4829,Heaton Stadium
+4830,Henderson Stadium
+4832,Heritage Park
+4833,Hilltop Park
+4834,Holman Stadium
+4835,Holt-Moffit Field
+4836,Honolulu Stadium
+4837,Hooker Field
+4838,Hughes Stadium
+4839,Joe Martin Field
+4840,John Ducey Park
+4841,John Petrakis Field
+4842,Kiwanis Field
+4843,Knoxville Municipal Stadium
+4844,Labatt Park
+4845,Laguna Park
+4846,Laguna Park
+4847,Lane Field
+4848,Lanphier Park
+4849,Lansdowne Park
+4850,Larry H. Miller Field
+4851,Lawrence Park
+3689,Telus Field
+3690,Seaman Stadium
+4009,Miyagi Stadium
+4010,Tsuruoka Dream Stadium
+4011,Meiji Jingu Stadium
+4012,Prince George Citizen Field
+4853,Legion Field
+4854,Legion Stadium
+4855,Lexington Stadium
+4856,Luther Williams Field
+4857,MacArthur Stadium
+4858,Maple Leaf Stadium
+4859,Marinelli Field
+4860,McDonough Park
+4861,Meadowbrook Park
+4862,Meinen Stadium
+4863,Met Park
+4864,Miami Stadium
+4865,Midway Stadium
+4866,Miles Field
+4867,Mirmow Stadium
+4868,Mission Stadium
+4869,Moana Stadium
+4870,Municipal Park
+4871,Municipal Stadium
+4872,Municipal Stadium
+4873,Muzzy Field
+4874,Ned Skeldon Stadium
+4875,Nicollet Park
+4876,Oaks Park
+4877,Offermann Stadium
+4878,Oiler Park
+4879,Olympic Stadium
+4880,Parker Field
+4881,Parker Field
+4882,Parkway Field
+4883,Pat Thomas Stadium
+4884,Paterson Field
+4885,Paul Eames Sports Complex
+4886,Payne Park
+4887,Pelican Stadium
+4888,Pete Beiden Field
+4889,Pete Vonachen Stadium
+4890,Pikeville Athletic Field Complex
+4891,Point Stadium
+4892,Pompano Beach Municipal Stadium
+4893,Ponce de Leon Park
+4894,Potter County Memorial Stadium
+4895,Privateer Park
+4896,Pynchon Stadium
+4897,Q Stadium
+4898,Queens Park Stadium
+4899,Quigley Stadium
+4900,Recreation Park
+4901,Riley Park
+4902,Riverfront Stadium
+4903,Riverside Sports Complex
+4904,Toro Stadium
+4905,Rohnert Park Stadium
+4906,Royal Athletic Park
+4907,Ruppert Stadium
+4908,Russwood Park
+4909,Sal Maglie Stadium
+4910,Salinas Municipal Stadium
+4911,Samuel W. Wolfson Park
+4912,Sanders-Jacobs Field
+4913,Sec Taylor Stadium
+4914,Serge B. Simmons Field
+4915,Silver Stadium
+4916,Simmons Field
+4917,Simplot Stadium
+4029,Goodwin Field
+3669,Botchan Stadium
+3670,Madonna Stadium
+4918,Sims Legion Park
+4919,Smithson Stadium
+4920,Smith-Wills Stadium
+4921,SPAR Stadium
+4922,St. Cloud Commons
+4923,Stade Amedee-Roy
+4924,Stade Municipal de Quebec
+4925,Stuart Stadium
+4926,Sulphur Dell
+4927,Louisiana SuperDome
+4928,Swayne Field
+4930,The Ballpark
+4931,The Ballpark at St. John's
+4932,The Cocoa Expo
+4933,Thurman Munson Memorial Stadium
+4934,Tim McCarver Stadium
+4935,Tingley Field
+4936,Tinker Field
+4937,V.J. Keefe Memorial Field
+4938,Vaughn Street Park
+4939,Veterans Field
+4940,Veterans Memorial Stadium
+4941,Vince Genna Stadium
+4942,Vincent-Beck Stadium
+4943,War Memorial Stadium
+4944,Warner Park
+4945,Washington Park
+4946,Waters Field
+4947,Welland Sports Stadium
+4948,West Palm Beach Municipal Stadium
+4949,Westgate Park
+4950,Wickers Stadium
+4951,Winnipeg Stadium
+4952,Witter Field
+4953,World War Memorial Stadium
+4954,Yale Field
+4955,Municipal Stadium
+2971,Les Murakami Stadium
+6,Tiger Stadium
+8,Hubert H. Humphrey Metrodome
+9,Yankee Stadium
+11,The Kingdome
+18,Cinergy Field
+21,Astrodome
+23,Milwaukee County Stadium
+25,Shea Stadium
+27,Three Rivers Stadium
+28,Qualcomm Stadium
+29,3Com Park at Candlestick Point
+30,Busch Stadium
+2502,Hermosillo
+2515,Baseball City Stadium
+2531,Desert Sun Stadium
+2533,Florida Power Park
+2538,"US West Sports Complex, Hi Corbett Field"
+4289,Nachan Ka'an
+2543,Mark Light Stadium
+2620,Regions Park
+2624,PGE Park
+2641,Drillers Stadium
+2660,Doubleday Field
+2505,Fort Lauderdale Stadium
+2509,Chain of Lakes Park
+2521,Knights Stadium
+26,Veterans Stadium
+2545,Christensen Stadium
+2721,Robert F. Kennedy Memorial Stadium
+2732,Blair County Ballpark
+2737,C.O. Brown Stadium
+2741,Capital City Stadium
+3629,Pim Mulier Stadium
+3869,Estadio Enzo Hernandez
+4129,Homestead Sports Complex
+2746,Civic Stadium
+2751,Cooper Stadium
+2752,Damaschke Field
+2776,Golden Park
+2798,Lake Olmstead Stadium
+2800,Lawrence-Dumont Stadium
+2804,Lynx Stadium
+3752,Estadio Luis Rodriguez Olmo
+2867,Municipal Stadium
+3109,League Park
+3110,League Park
+3111,Arlington Stadium
+3112,Atlanta-Fulton County Stadium
+3113,Baker Bowl
+3114,Bennett Park
+3115,Braves Field
+3116,Cleveland Municipal Stadium
+3117,Colt Stadium
+3118,Columbia Park
+3119,Comiskey Park
+3120,Crosley Field
+3121,Ebbets Field
+3123,Exhibition Stadium
+3124,Exposition Park
+3125,Forbes Field
+3126,Griffith Stadium
+3127,Hilltop Park
+3128,Huntington Avenue Grounds
+3129,Jarry Park
+3131,League Park
+3132,Lloyd Street Grounds
+3133,Los Angeles Memorial Coliseum
+3134,Memorial Stadium
+3135,Metropolitan Stadium
+3136,Mile High Stadium
+3137,Municipal Stadium
+3138,Palace of the Fans
+3139,Polo Grounds
+3140,Polo Grounds
+3141,Robison Field
+3142,Seals Stadium
+3143,Shibe Park
+3144,South End Grounds
+3147,South End Grounds
+3148,South Side Park
+3149,Sportsman's Park
+3150,Washington Park
+3153,Wrigley Field
+3154,Aloha Stadium
+3155,Armory Park
+3156,Burns Park
+3157,Fairview Park
+3158,Jailhouse Flats
+3159,League Park
+3160,League Park
+3161,Mahaffey Park
+3162,Neil Park
+3163,Neil Park
+3164,Oriole Park
+3165,Ramona Park
+3166,Rocky Point Park
+3167,Sportsman's Park
+3168,Sportsman's Park
+3169,West Side Park
+3170,Wiedenmeyer's Park
+3310,Francis Wong Stadium
+3311,Maehara Baseball Stadium
+3709,St. Albert Legion Park
+3889,Enrique 'Trapo' Torrebiarte Stadium
+2809,McDermott Field
+2811,Memorial Stadium
+2812,Mike Lansing Field
+2834,Ray Winder Field
+2838,Rosenblatt Stadium
+2847,Skylands Park
+2860,Watt Powell Park
+2863,Yakima County Stadium
+2909,Progress Energy Park
+426,Default Central (G)
+454,Default AST (G)
+456,Default CST (G)
+3290,Melching Field
+3649,Mestsky Stadium
+3650,Blansko Field
+3651,Ostrava Field
+4069,Daniel Canonico Stadium
+4189,Tianmu Baseball Stadium
+4190,Chengcing Lake Baseball Stadium
+2952,Estadio General Heriberto Jara Corona
+2954,Estadio 20 de Noviembre
+3033,Estadio Br. Julio Hernandez Molina
+3549,Alumni Field
+3550,Cardines Field
+3551,Frasier Field
+3552,Fuessenich Park
+3554,J.P. Riddle Stadium
+3555,Joe Wolfe Field
+3556,MacKenzie Stadium
+3557,MLB Urban Youth Academy
+3559,Wahconah Park
+3210,Estadio Chihuahua
+3449,English Field
+4049,Doak Field at Dail Park
+4050,Minges-Overton Baseball Complex
+4051,Frazier Field
+3249,Buck O'Neil Complex
+5018,American Airlines Arena
+5020,Amway Center
+5022,AT&T Center
+5025,Bankers Life Fieldhouse
+5029,BMO Harris Bradley Center
+5033,Chesapeake Energy Arena
+5038,FedEx Forum
+5042,Georgia Dome
+5044,Gillette Stadium
+5045,Heinz Field
+5057,Moda Center
+5062,Oakland-Alameda County Coliseum Arena
+5069,Quicken Loans Arena
+5078,Smoothie King Center
+5083,Talking Stick Resort Arena
+5084,Target Center
+5086,The Palace at Auburn Hills
+5087,Time Warner Arena
+5089,Toyota Center
+5095,Vivint Smart Home Arena
+5105,Winnipeg Arena
+5106,America West Arena
+5107,Boston Arena
+5108,Boston Garden
+5109,Buffalo Memorial Auditorium
+5110,Omni Coliseum
+5111,Stampede Corral
+5112,XL Center
+5113,Greensboro Coliseum
+5114,Chicago Coliseum
+5115,Chicago Stadium
+5116,Colisee Pepsi
+5117,McNichols Sports Arena
+5118,Met Center
+5119,Reunion Arena
+5120,Detroit Olympia
+5121,Miami Arena
+5122,Long Beach Arena
+5123,The Forum
+5124,Montreal Arena
+5125,Jubilee Arena
+5126,Mount Royal Arena
+5127,Montreal Forum
+5128,Kemper Arena
+5129,McNichols Arena
+5130,Continental Airlines Arena
+5131,Nassau Veterans Memorial Coliseum
+5132,Madison Square Garden (III)
+5133,Ottawa Civic Center
+5134,Spectrum
+5135,Civic Arena
+5136,Cow Palace
+5137,St. Louis Arena
+5138,Expo Hall
+5139,Thunderdome
+5140,Mutual Street Arena
+5141,Maple Leafs Gardens
+5142,Pacific Coliseum
+5143,Capital Centre
+5144,Phillips Arena
+5440,Campbell's Field
+5441,Cooper Park
+5442,Riverfront Stadium
+5444,The Ballpark at Harbor Yard
