@@ -56,7 +56,7 @@ def export_team_data():
 
 
 # Players
-def export_player_data(seasons):
+def export_player_data(season):
     #get newest year to oldest so that we dont overwrite current teams with old teams
     book = xlwt.Workbook(encoding="utf-8")
     sheet = book.add_sheet("Player")
@@ -66,26 +66,25 @@ def export_player_data(seasons):
     
     player_ids = []
     player_counter = 1
-    for season in seasons:
-        url = "https://statsapi.mlb.com/api/v1/sports/1/players?season=" + season
-        print("Getting player data from " + url)
-        players = requests.get(url).json()
-        for player in players['people']:
-            if player['id'] not in player_ids:
-                sheet.write(player_counter, 0, player['id'])
-                sheet.write(player_counter, 1, player['fullName'])
-                sheet.write(player_counter, 2, player['firstName'])
-                sheet.write(player_counter, 3, player['lastName'])
-                sheet.write(player_counter, 4, player['birthDate'])
-                sheet.write(player_counter, 5, player['currentTeam']['id'])
-                sheet.write(player_counter, 6, player['primaryPosition']['abbreviation'])
-                sheet.write(player_counter, 7, player['mlbDebutDate'])
-                sheet.write(player_counter, 8, player['batSide']['code'])
-                sheet.write(player_counter, 9, player['pitchHand']['code'])
-                player_ids.append(player['id'])
-                player_counter += 1
+    url = "https://statsapi.mlb.com/api/v1/sports/1/players?season=" + str(season)
+    print("Getting player data from " + url)
+    players = requests.get(url).json()
+    for player in players['people']:
+        if player['id'] not in player_ids:
+            sheet.write(player_counter, 0, player['id'])
+            sheet.write(player_counter, 1, player['fullName'])
+            sheet.write(player_counter, 2, player['firstName'])
+            sheet.write(player_counter, 3, player['lastName'])
+            sheet.write(player_counter, 4, player['birthDate'])
+            sheet.write(player_counter, 5, player['currentTeam']['id'])
+            sheet.write(player_counter, 6, player['primaryPosition']['abbreviation'])
+            sheet.write(player_counter, 7, player['mlbDebutDate'])
+            sheet.write(player_counter, 8, player['batSide']['code'])
+            sheet.write(player_counter, 9, player['pitchHand']['code'])
+            player_ids.append(player['id'])
+            player_counter += 1
         sleep(10)
-    book.save('data/Player.xls')
+    book.save("data/" + season + "-Player.xls")
 
 
 # Schedule
@@ -227,7 +226,7 @@ date_ranges = [{'season': '2018', 'start_date': '03/29/2018', 'end_date': '10/28
 seasons = ['2019', '2018']
 game_ids = []
 
-export_venue_data()
+#export_venue_data()
 # sleep(10)
 # export_team_data()
 # sleep(10)
