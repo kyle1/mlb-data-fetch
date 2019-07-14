@@ -1,144 +1,269 @@
-import sys
-import time
+from PyQt5.QtCore import QDateTime, Qt, QTimer, QRect
+from PyQt5.QtWidgets import (QApplication, QCheckBox, QComboBox, QDateTimeEdit,
+        QDial, QDialog, QFileDialog, QGridLayout, QGroupBox, QHBoxLayout, QLabel, QLineEdit,
+        QProgressBar, QPushButton, QRadioButton, QScrollBar, QSizePolicy,
+        QSlider, QSpinBox, QStyleFactory, QTableWidget, QTabWidget, QTextEdit,
+        QVBoxLayout, QWidget)
+from PyQt5.QtGui import QPalette, QColor
 
-from PyQt5 import QtCore, QtGui, QtWidgets
-from fetch import export_player_data
 
-class ui_MainWindow(object):
+class WidgetGallery(QDialog):
+    def __init__(self, parent=None):
+        super(WidgetGallery, self).__init__(parent)
 
-    def setupUi(self, MainWindow):
+        QApplication.setStyle(QStyleFactory.create('Fusion'))
+        QApplication.setPalette(QApplication.style().standardPalette())
 
+        self.createSeasonsGroupBox()
+        self.createExportGroupBox()
+        self.createLogGroupBox()
+        self.createSchemaTabWidget()
+        self.createRequestsGroupBox()
+        self.createProgressBar()
+
+        self.path = ""
+
+        topLayout = QHBoxLayout()
         seasons = ["2005", "2006", "2007", "2008", "2009", "2010", "2011", "2012", "2013", "2014", "2015", "2016", "2017", "2018", "2019"]
+        seasonsBeginComboBox = QComboBox()
+        seasonsBeginComboBox.addItems(seasons)
+        seasonsEndComboBox = QComboBox()
+        seasonsEndComboBox.addItems(seasons)
+        seasonsLabel = QLabel("Seasons:")
+        seasonsLabel.setGeometry(QRect(10, 10, 20, 20))
+        seasonsLabel.setBuddy(seasonsBeginComboBox)
+        toLabel = QLabel("to")
+        toLabel.setGeometry(QRect(70, 10, 20, 20))
+        toLabel.setBuddy(seasonsEndComboBox)
+        topLayout.addWidget(seasonsLabel)
+        topLayout.addWidget(seasonsBeginComboBox)
+        topLayout.addWidget(toLabel)
+        topLayout.addWidget(seasonsEndComboBox)
+        topLayout.addStretch(1)
 
-        # Main window
-        MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(1200, 800)
-        self.centralwidget = QtWidgets.QWidget(MainWindow)
-        self.centralwidget.setObjectName("centralwidget")
-        MainWindow.setCentralWidget(self.centralwidget)
-        _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MLB Data Fetch", "MLB Data Fetch"))
+        mainLayout = QGridLayout()
+        # mainLayout.addLayout(topLayout, 0, 0, 1, 2)
+        # mainLayout.addWidget(self.schemaTabWidget, 1, 0, 3, 1)
+        # mainLayout.addWidget(self.seasonsGroupBox, 1, 1, 1, 1)
+        # mainLayout.addWidget(self.exportGroupBox, 2, 1, 1, 1)
+        # mainLayout.addWidget(self.requestsGroupBox, 3, 1, 1, 1)
+        # mainLayout.addWidget(self.logGroupBox, 4, 0, 1, 2)
+        # mainLayout.addWidget(self.progressBar, 5, 0, 1, 2)
+        mainLayout.addWidget(self.schemaGroupBox, 0, 0, 3, 1)
+        mainLayout.addWidget(self.seasonsGroupBox, 0, 1, 1, 1)
+        mainLayout.addWidget(self.exportGroupBox, 1, 1, 1, 1)
+        mainLayout.addWidget(self.requestsGroupBox, 2, 1, 1, 1)
+        mainLayout.addWidget(self.logGroupBox, 3, 0, 1, 2)
+        mainLayout.addWidget(self.progressBar, 4, 0, 1, 2)
+        mainLayout.setRowStretch(1, 1)
+        mainLayout.setRowStretch(2, 1)
+        mainLayout.setColumnStretch(0, 1)
+        mainLayout.setColumnStretch(1, 1)
 
-        #QtCore.QMetaObject.connectSlotsByName(MainWindow)
+        # Dark mode
+        palette = QPalette()
+        palette.setColor(QPalette.Window, QColor(53, 53, 53))
+        palette.setColor(QPalette.WindowText, Qt.white)
+        palette.setColor(QPalette.Base, QColor(25, 25, 25))
+        palette.setColor(QPalette.AlternateBase, QColor(53, 53, 53))
+        palette.setColor(QPalette.ToolTipBase, Qt.white)
+        palette.setColor(QPalette.ToolTipText, Qt.white)
+        palette.setColor(QPalette.Text, Qt.white)
+        palette.setColor(QPalette.Button, QColor(53, 53, 53))
+        palette.setColor(QPalette.ButtonText, Qt.white)
+        palette.setColor(QPalette.BrightText, Qt.red)
+        palette.setColor(QPalette.Link, QColor(42, 130, 218))
+        palette.setColor(QPalette.Highlight, QColor(42, 130, 218))
+        palette.setColor(QPalette.HighlightedText, Qt.black)
+        app.setPalette(palette)
 
-        self.lblSeasons = QtWidgets.QLabel(self.centralwidget)
-        self.lblSeasons.setGeometry(QtCore.QRect(30, 20, 111, 16))
-        self.lblSeasons.setObjectName("lblSeasons")
-        self.lblSeasons.setText("Seasons")
+        self.setLayout(mainLayout)
+        self.setWindowTitle("MLB Data Fetch")
 
-        self.cboBeginSeason = QtWidgets.QComboBox(self.centralwidget)
-        self.cboBeginSeason.setGeometry(QtCore.QRect(80, 20, 50, 22))
-        self.cboBeginSeason.setObjectName("cboBeginSeason")
-        self.cboBeginSeason.addItems(seasons)
-        self.cboBeginSeason.setMaxVisibleItems(20)
+    def chooseFilePath(self):
+        self.path = str(QFileDialog.getExistingDirectory(self, "Select Directory"))
+        self.pathLabel.setText(self.path)
 
-        self.lblTo = QtWidgets.QLabel(self.centralwidget)
-        self.lblTo.setGeometry(QtCore.QRect(140, 20, 111, 16))
-        self.lblTo.setObjectName("lblTo")
-        self.lblTo.setText("to")
+    def advanceProgressBar(self):
+        curVal = self.progressBar.value()
+        maxVal = self.progressBar.maximum()
+        self.progressBar.setValue(curVal + (maxVal - curVal) / 100)
 
-        self.cboEndSeason = QtWidgets.QComboBox(self.centralwidget)
-        self.cboEndSeason.setGeometry(QtCore.QRect(160, 20, 50, 22))
-        self.cboEndSeason.setObjectName("cboEndSeason")
-        self.cboEndSeason.addItems(seasons)
-        self.cboEndSeason.setMaxVisibleItems(20)
+    def createSeasonsGroupBox(self):
+        self.seasonsGroupBox = QGroupBox("Seasons")
+        topLayout = QHBoxLayout()
+        seasons = ["2005", "2006", "2007", "2008", "2009", "2010", "2011", "2012", "2013", "2014", "2015", "2016", "2017", "2018", "2019"]
+        seasonsBeginComboBox = QComboBox()
+        seasonsBeginComboBox.addItems(seasons)
+        seasonsEndComboBox = QComboBox()
+        seasonsEndComboBox.addItems(seasons)
+        seasonsLabel = QLabel("Range:")
+        seasonsLabel.setGeometry(QRect(10, 10, 20, 20))
+        seasonsLabel.setBuddy(seasonsBeginComboBox)
+        toLabel = QLabel("to")
+        toLabel.setGeometry(QRect(70, 10, 20, 20))
+        toLabel.setBuddy(seasonsEndComboBox)
+        topLayout.addWidget(seasonsLabel)
+        topLayout.addWidget(seasonsBeginComboBox)
+        topLayout.addWidget(toLabel)
+        topLayout.addWidget(seasonsEndComboBox)
+        topLayout.addStretch(1)
+ 
+        seasonsLayout = QGridLayout()
+        seasonsLayout.addLayout(topLayout, 0, 0, 1, 1)
+        self.seasonsGroupBox.setLayout(seasonsLayout)   
 
-        # PLAYERS
-        self.grpPlayers = QtWidgets.QGroupBox(self.centralwidget)
-        self.grpPlayers.setGeometry(QtCore.QRect(30, 70, 175, 320))
-        self.grpPlayers.setObjectName("grpPlayers")
-        self.grpPlayers.setTitle("")
-        self.chkPlayers = QtWidgets.QCheckBox(self.grpPlayers)
-        self.chkPlayers.setGeometry(QtCore.QRect(5, 5, 70, 17))
-        self.chkPlayers.setObjectName("chkPlayers")
-        self.chkPlayers.setText("Players")
-        self.chkPlayers.setChecked(True)
-        self.chkPlayers.stateChanged.connect(lambda: togglePlayers())
-        player_props = ["PlayerID", "Season", "FullName", "FirstName", "LastName", "BirthDate", "Age", "Height", "Weight", "TeamID", "Position", "DebutDate", "BatSide", "PitchHand"]
-        for i in range(len(player_props)):
-            self.checkbox = QtWidgets.QCheckBox(self.grpPlayers)
-            self.checkbox.setGeometry(QtCore.QRect(20, 30+(20*i), 100, 17))
-            self.checkbox.setObjectName(player_props[i])
-            self.checkbox.setText(player_props[i])
-            self.checkbox.setChecked(True)
+    def createExportGroupBox(self):
+        self.exportGroupBox = QGroupBox("Export")
+        pathButton = QPushButton("Choose file path")
+        pathButton.clicked.connect(self.chooseFilePath)
+        self.pathLabel = QLabel("")
 
-        def togglePlayers():
-            if self.chkPlayers.isChecked():
-                for prop in player_props:
-                    checkbox = self.grpPlayers.findChild(QtWidgets.QCheckBox, prop)
-                    checkbox.setEnabled(True)
-            else:
-                for prop in player_props:
-                    checkbox = self.grpPlayers.findChild(QtWidgets.QCheckBox, prop)
-                    checkbox.setEnabled(False)
+        radioButton1 = QRadioButton(".xls")
+        radioButton2 = QRadioButton(".csv")
+        radioButton1.setChecked(True)
 
-        wait_times = []
-        for i in range(31):
-            wait_times.append(str(i))
+        layout = QVBoxLayout()
+        layout.addWidget(pathButton)
+        layout.addWidget(self.pathLabel)
+        layout.addWidget(radioButton1)
+        layout.addWidget(radioButton2)
+        layout.addStretch(1)
+        self.exportGroupBox.setLayout(layout)    
 
-        # GO
-        self.grpGo = QtWidgets.QGroupBox(self.centralwidget)
-        self.grpGo.setGeometry(QtCore.QRect(500, 500, 218, 108))
-        self.grpGo.setObjectName("grpGo")
-        self.grpGo.setTitle("")
-        self.lblWaitTime = QtWidgets.QLabel(self.grpGo)
-        self.lblWaitTime.setGeometry(QtCore.QRect(10, 5, 150, 25))
-        self.lblWaitTime.setObjectName("lblWaitTime")
-        self.lblWaitTime.setText("Wait time between requests:")
-        self.cboRequestMin = QtWidgets.QComboBox(self.grpGo)
-        self.cboRequestMin.setGeometry(QtCore.QRect(10, 30, 45, 22))
-        self.cboRequestMin.setObjectName("cboRequestMin")
-        self.cboRequestMin.addItems(wait_times)
-        self.cboRequestMin.setMaxVisibleItems(20)
-        self.lblTo = QtWidgets.QLabel(self.grpGo)
-        self.lblTo.setGeometry(QtCore.QRect(60, 30, 30, 25))
-        self.lblTo.setObjectName("lblTo")
-        self.lblTo.setText("to")
-        self.cboRequestMax = QtWidgets.QComboBox(self.grpGo)
-        self.cboRequestMax.setGeometry(QtCore.QRect(75, 30, 45, 22))
-        self.cboRequestMax.setObjectName("cboRequestMax")
-        self.cboRequestMax.addItems(wait_times)
-        self.cboRequestMax.setMaxVisibleItems(20)
-        self.lblSeconds = QtWidgets.QLabel(self.grpGo)
-        self.lblSeconds.setGeometry(QtCore.QRect(125, 30, 120, 25))
-        self.lblSeconds.setObjectName("lblSeconds")
-        self.lblSeconds.setText("seconds (random)")
-        self.btnGo = QtWidgets.QPushButton(self.grpGo)
-        self.btnGo.setGeometry(QtCore.QRect(150, 75, 60, 22))
-        self.btnGo.setObjectName("btnGo")
-        self.btnGo.setText("Go")
-        self.btnGo.clicked.connect(lambda: getData())
+    def createLogGroupBox(self):
+        self.logGroupBox = QGroupBox("Log")
+        textEdit = QTextEdit()
+        layout = QVBoxLayout()
+        layout.setContentsMargins(0, 0, 0, 0)
+        layout.addWidget(textEdit)
+        layout.addStretch(1)
+        self.logGroupBox.setLayout(layout)
 
-        def getData():
-            thread = GetDataThread(self)
-            thread.start()
-            # requested_seasons = []
-            # for i in range(int(self.cboBeginSeason.currentText()), int(self.cboEndSeason.currentText())+1):
-            #     requested_seasons.append(i)
-            
-            # for season in requested_seasons:
-            #     if self.chkPlayers.isChecked():
-            #         player_cols = []
-            #         for prop in player_props:
-            #             checkbox = self.grpPlayers.findChild(QtWidgets.QCheckBox, prop)
-            #             if checkbox.isChecked():
-            #                 player_cols.append(prop)
-            #     export_player_data(season)
+    def createSchemaTabWidget(self):
+        self.schemaGroupBox = QGroupBox("Data")
+        layout = QVBoxLayout()
+        
 
 
-class GetDataThread(QtCore.QThread):
+        self.schemaTabWidget = QTabWidget()
+        self.schemaTabWidget.setMinimumHeight(300)
+        self.schemaTabWidget.setMinimumWidth(380)
 
-    def run(self):
-        count = 0
-        while count < 100:
-            count += 1
-            print(count)
-            sleep(2)
+        # player_tab = QWidget()
+        # player_tab_vbox = QVBoxLayout()
+        # player_tab_vbox.setContentsMargins(5, 20, 5, 5)
+        # player_groupbox = QGroupBox("Player")
+        # player_groupbox.setCheckable(True)
+        # player_groupbox.setChecked(True)
+        # player_groupbox.setContentsMargins(5, 5, 5, 5)
+        # player_props = ["PlayerID", "Season", "FullName", "FirstName", "LastName", "BirthDate",
+        #                 "Age", "Height", "Weight", "TeamID", "Position", "DebutDate", "BatSide", "PitchHand"]
+        # for i in range(len(player_props)):
+        #     checkbox = QCheckBox(player_groupbox)
+        #     checkbox.setGeometry(QRect(25, 25+(20*i), 100, 17))
+        #     checkbox.setObjectName(player_props[i])
+        #     checkbox.setText(player_props[i])
+        #     checkbox.setChecked(True)
+        # player_tab_vbox.addWidget(player_groupbox)
+        # player_tab.setLayout(player_tab_vbox)
+        
+        tabs = ["Player", "Team", "Venue", "Game", "PlayByPlay", "Schedule"]
+        props = [
+            ["PlayerID", "Season", "FullName", "FirstName", "LastName", "BirthDate", "Age", "Height", "Weight", "TeamID", "Position", "DebutDate", "BatSide", "PitchHand"],
+            ["TeamID", "Name", "VenueID", "Abbreviation", "LocationName", "LeagueID", "DivisionID"],
+            ["VenueID", "Name"],
+            ["GameID", "Season", "GameDate", "Status", "AwayTeamID", "AwayTeamRecordWins", "AwayTeamRecordLosses", "AwayTeamRecordPct", "HomeTeamID", "HomeTeamScore", "HomeTeamRecordWins", "HomeTeamRecordLosses", "HomeTeamRecordPct", "VenueID", "DayNight", "SeriesGameNumber", "SeriesDescription"],
+            ["PlayByPlayID", "GameID", "BatterID", "BatSide", "BatterSplit", "PitcherID", "PitchHand", "MenOnBase", "Event", "EventType", "IsScoringPlay", "AwayTeamScore", "HomeTeamScore", "AtBatIndex", "HalfInning", "Inning", "Outs"],
+            ["GameID", "GameDate", "AwayTeamID", "HomeTeamID", "VenueID"]
+        ]
 
-if __name__ == "__main__":
-    app = QtWidgets.QApplication(sys.argv)
-    MainWindow = QtWidgets.QMainWindow()
-    ui = ui_MainWindow()
-    ui.setupUi(MainWindow)
-    MainWindow.show()
-    sys.exit(app.exec_())
+        for i in range(len(tabs)):
+            tab = QWidget()
+            tab_vbox = QVBoxLayout()
+            tab_vbox.setContentsMargins(5, 5, 5, 5)
+            tab_groupbox = QGroupBox(tabs[i])
+            tab_groupbox.setCheckable(True)
+            tab_groupbox.setChecked(True)
+            tab_groupbox.setContentsMargins(5, 5, 5, 5)
+            cols = props[i]
+            x_offset = 0
+            y_multiplier = 0
+
+            for j in range(len(cols)):
+                if j == 10:
+                    x_offset = 175
+                    y_multiplier = 0
+                checkbox = QCheckBox(tab_groupbox)
+                checkbox.setGeometry(QRect(20+x_offset, 35+(20*y_multiplier), 150, 17))
+                checkbox.setObjectName(cols[j])
+                checkbox.setText(cols[j])
+                checkbox.setChecked(True)
+                y_multiplier += 1
+
+            tab_vbox.addWidget(tab_groupbox)
+            tab.setLayout(tab_vbox)
+            self.schemaTabWidget.addTab(tab, tabs[i])
+
+        layout.addWidget(self.schemaTabWidget)
+        self.schemaGroupBox.setLayout(layout)
+
+    def createRequestsGroupBox(self):
+        self.requestsGroupBox = QGroupBox("Make Requests")
+        self.requestsGroupBox.setMinimumWidth(380)
+
+        topLayout = QHBoxLayout()
+        minSpinBox = QSpinBox()
+        minSpinBox.setValue(0)
+        maxSpinBox = QSpinBox()
+        maxSpinBox.setValue(30)
+        waitTimeLabel = QLabel("Wait")
+        waitTimeLabel.setGeometry(QRect(10, 10, 20, 20))
+        waitTimeLabel.setBuddy(minSpinBox)
+        toLabel = QLabel("to")
+        toLabel.setGeometry(QRect(70, 10, 20, 20))
+        toLabel.setBuddy(maxSpinBox)
+        secondsLabel = QLabel("seconds between requests.")
+        secondsLabel.setGeometry(QRect(130, 10, 20, 20))
+        topLayout.addWidget(waitTimeLabel)
+        topLayout.addWidget(minSpinBox)
+        topLayout.addWidget(toLabel)
+        topLayout.addWidget(maxSpinBox)
+        topLayout.addWidget(secondsLabel)
+        topLayout.addStretch(1)
+
+        middleLayout = QHBoxLayout()
+        estimatedTimeLabel = QLabel("Estimated run time:")
+        middleLayout.addWidget(estimatedTimeLabel)
+        middleLayout.addStretch(1)
+
+        bottomLayout = QHBoxLayout()
+        goButton = QPushButton("Go")
+        goButton.setMinimumHeight(30)
+        goButton.setMinimumWidth(300)
+        bottomLayout.addWidget(goButton)
+
+        requestsLayout = QGridLayout()
+        requestsLayout.addLayout(topLayout, 0, 0, 1, 1)
+        requestsLayout.addLayout(middleLayout, 1, 0, 1, 1)
+        requestsLayout.addLayout(bottomLayout, 2, 0, 1, 1)
+        self.requestsGroupBox.setLayout(requestsLayout)
+
+    def createProgressBar(self):
+        self.progressBar = QProgressBar()
+        self.progressBar.setRange(0, 10000)
+        self.progressBar.setValue(0)
+
+        timer = QTimer(self)
+        timer.timeout.connect(self.advanceProgressBar)
+        timer.start(1000)
+
+
+if __name__ == '__main__':
+
+    import sys
+
+    app = QApplication(sys.argv)
+    gallery = WidgetGallery()
+    gallery.show()
+    sys.exit(app.exec_()) 
