@@ -3,6 +3,7 @@ from PyQt5.QtWidgets import (QApplication, QCheckBox, QComboBox, QDateTimeEdit, 
 from PyQt5.QtGui import QPalette, QColor
 from threading import Thread
 from time import sleep
+from random import randint
 import fetch as fetch
 
 
@@ -15,6 +16,7 @@ class WidgetGallery(QDialog):
 
         self.tabGroupboxes = []
         self.savePath = ""
+        self.logMessages = ""
 
         self.setDarkMode()
         self.createSeasonsGroupBox()
@@ -23,6 +25,7 @@ class WidgetGallery(QDialog):
         self.createSchemaTabWidget()
         self.createRequestsGroupBox()
         self.createProgressBar()
+        self.initiateLogWatcher()
 
         mainLayout = QGridLayout()
         mainLayout.addWidget(self.schemaGroupBox, 0, 0, 3, 1)
@@ -93,26 +96,37 @@ class WidgetGallery(QDialog):
         for i in range(int(self.seasonsBeginComboBox.currentText()), int(self.seasonsEndComboBox.currentText())+1):
             seasons.append(i)
 
+        minSec = self.minSpinBox.value()
+        maxSec = self.maxSpinBox.value()
+        for table in tables:
+            # Team and Venue are not based on season, so just get this data once
+            if table["tableName"] == "Team":
+                fetch.export_team_data(table["cols"], self.savePath)
+                self.logMessages += "Team data written to " + self.savePath + "/Team.xls\n"
+                sleep(randint(minSec, maxSec))
+            if table["tableName"] == "Venue":
+                fetch.export_venue_data(table["cols"], self.savePath)
+                self.logMessages += "Venue data written to " + self.savePath + "/Venue.xls\n"
+                sleep(randint(minSec, maxSec))
+
         for season in seasons:
             for table in tables:
                 if table["tableName"] == "Player":
-                    fetch.export_player_data(season, table["cols"])
-                    #sleep(10)
-                # if table["tableName"] == "Team":
-                #     fetch.export_team_data(season, table["cols"])
-                #     sleep(10)
-                # if table["tableName"] == "Venue":
-                #     fetch.export_venue_data(season, table["cols"])
-                #     sleep(10)
-                # if table["tableName"] == "Game":
-                #     fetch.export_game_data(season, table["cols"])
-                #     sleep(10)
-                # if table["PlayByPlay"] == "PlayByPlay":
-                #     fetch.export_game_data(season, table["cols"])
-                #     sleep(10)
-                # if table["Schedule"] == "Schedule":
-                #     fetch.export_game_data(season, table["cols"])
-                #     sleep(10)
+                    fetch.export_player_data(season, table["cols"], self.savePath)
+                    self.logMessages += "Player data written to " + self.savePath + "/Player" + str(season) + ".xls\n"
+                    sleep(randint(minSec, maxSec))
+                if table["tableName"] == "Schedule":
+                    fetch.export_schedule_data(season, table["cols"], self.savePath)
+                    self.logMessages += "Schedule data written to " + self.savePath + "/Schedule" + str(season) + ".xls\n"
+                    sleep(randint(minSec, maxSec))
+                if table["tableName"] == "Game":
+                    fetch.export_game_data(season, table["cols"], self.savePath)
+                    self.logMessages += "Game data written to " + self.savePath + "/Game" + str(season) + ".xls\n"
+                    sleep(randint(minSec, maxSec))
+                if table["tableName"] == "PlayByPlay":
+                    fetch.export_pbp_data(season, table["cols"], minSec, maxSec, self.savePath)
+                    self.logMessages += "PlayByPlay data written to " + self.savePath + "/PlayByPlay" + str(season) + ".xls\n"
+                    sleep(randint(minSec, maxSec))
 
 
     def goButtonClicked(self):
@@ -167,10 +181,12 @@ class WidgetGallery(QDialog):
 
     def createLogGroupBox(self):
         self.logGroupBox = QGroupBox("Log")
-        textEdit = QTextEdit()
+        self.logTextbox = QTextEdit()
+        #self.logTextbox.setDisabled(True)
+        self.logTextbox.setReadOnly(True)
         layout = QVBoxLayout()
         layout.setContentsMargins(0, 0, 0, 0)
-        layout.addWidget(textEdit)
+        layout.addWidget(self.logTextbox)
         layout.addStretch(1)
         self.logGroupBox.setLayout(layout)
 
@@ -180,15 +196,15 @@ class WidgetGallery(QDialog):
         self.schemaTabWidget = QTabWidget()
         self.schemaTabWidget.setMinimumHeight(300)
         self.schemaTabWidget.setMinimumWidth(380)
-        
-        self.tabs = ["Player", "Team", "Venue", "Game", "PlayByPlay", "Schedule"]
+
+        self.tabs = ["Team", "Venue", "Player", "Schedule", "Game", "PlayByPlay"]
         self.props = [
-            ["PlayerID", "Season", "FullName", "FirstName", "LastName", "BirthDate", "Age", "Height", "Weight", "TeamID", "Position", "DebutDate", "BatSide", "PitchHand"],
             ["TeamID", "Name", "VenueID", "Abbreviation", "LocationName", "LeagueID", "DivisionID"],
             ["VenueID", "Name"],
+            ["PlayerID", "Season", "FullName", "FirstName", "LastName", "BirthDate", "Age", "Height", "Weight", "TeamID", "Position", "DebutDate", "BatSide", "PitchHand"],
+            ["GameID", "GameDate", "AwayTeamID", "HomeTeamID", "VenueID"],
             ["GameID", "Season", "GameDate", "Status", "AwayTeamID", "AwayTeamRecordWins", "AwayTeamRecordLosses", "AwayTeamRecordPct", "HomeTeamID", "HomeTeamScore", "HomeTeamRecordWins", "HomeTeamRecordLosses", "HomeTeamRecordPct", "VenueID", "DayNight", "GamesInSeries", "SeriesGameNumber", "SeriesDescription"],
-            ["PlayByPlayID", "GameID", "BatterID", "BatSide", "BatterSplit", "PitcherID", "PitchHand", "MenOnBase", "Event", "EventType", "IsScoringPlay", "AwayTeamScore", "HomeTeamScore", "AtBatIndex", "HalfInning", "Inning", "Outs"],
-            ["GameID", "GameDate", "AwayTeamID", "HomeTeamID", "VenueID"]
+            ["PlayByPlayID", "GameID", "BatterID", "BatSide", "BatterSplit", "PitcherID", "PitchHand", "MenOnBase", "Event", "EventType", "IsScoringPlay", "AwayTeamScore", "HomeTeamScore", "AtBatIndex", "HalfInning", "Inning", "Outs"]
         ]
 
         for i in range(len(self.tabs)):
@@ -228,22 +244,22 @@ class WidgetGallery(QDialog):
         self.requestsGroupBox.setMinimumWidth(380)
 
         topLayout = QHBoxLayout()
-        minSpinBox = QSpinBox()
-        minSpinBox.setValue(0)
-        maxSpinBox = QSpinBox()
-        maxSpinBox.setValue(30)
+        self.minSpinBox = QSpinBox()
+        self.minSpinBox.setValue(5)
+        self.maxSpinBox = QSpinBox()
+        self.maxSpinBox.setValue(15)
         waitTimeLabel = QLabel("Wait")
         waitTimeLabel.setGeometry(QRect(10, 10, 20, 20))
-        waitTimeLabel.setBuddy(minSpinBox)
+        waitTimeLabel.setBuddy(self.minSpinBox)
         toLabel = QLabel("to")
         toLabel.setGeometry(QRect(70, 10, 20, 20))
-        toLabel.setBuddy(maxSpinBox)
+        toLabel.setBuddy(self.maxSpinBox)
         secondsLabel = QLabel("seconds between requests.")
         secondsLabel.setGeometry(QRect(130, 10, 20, 20))
         topLayout.addWidget(waitTimeLabel)
-        topLayout.addWidget(minSpinBox)
+        topLayout.addWidget(self.minSpinBox)
         topLayout.addWidget(toLabel)
-        topLayout.addWidget(maxSpinBox)
+        topLayout.addWidget(self.maxSpinBox)
         topLayout.addWidget(secondsLabel)
         topLayout.addStretch(1)
 
@@ -265,6 +281,9 @@ class WidgetGallery(QDialog):
         requestsLayout.addLayout(bottomLayout, 2, 0, 1, 1)
         self.requestsGroupBox.setLayout(requestsLayout)
 
+    def lol(self):
+        self.logTextbox.setText(self.logMessages)
+
     def createProgressBar(self):
         self.progressBar = QProgressBar()
         self.progressBar.setRange(0, 10000)
@@ -272,6 +291,11 @@ class WidgetGallery(QDialog):
         timer = QTimer(self)
         timer.timeout.connect(self.advanceProgressBar)
         timer.start(1000)
+
+    def initiateLogWatcher(self):
+        logTimer = QTimer(self)
+        logTimer.timeout.connect(self.lol)
+        logTimer.start(3000)
 
 
 if __name__ == '__main__':
