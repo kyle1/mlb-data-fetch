@@ -8,9 +8,11 @@ import pytz
 from datetime import datetime
 
 # Players
-def export_player_data(season, cols):
+def export_player_data(season):
+    #get newest year to oldest so that we dont overwrite current teams with old teams
     book = xlwt.Workbook(encoding="utf-8")
     sheet = book.add_sheet("Player")
+    cols = ["PlayerID", "FullName", "FirstName", "LastName", "BirthDate", "TeamID", "Position", "DebutDate", "BatSide", "PitchHand"]
     for i in range(len(cols)):
         sheet.write(0, i, cols[i])
     
@@ -20,130 +22,21 @@ def export_player_data(season, cols):
     print("Getting player data from " + url)
     players = requests.get(url).json()
     for player in players['people']:
-        col_count = 0
-
-        if "PlayerID" in cols:
-            sheet.write(player_counter, col_count, player['id'])
-            col_count += 1
-
-        if "Season" in cols:
-            sheet.write(player_counter, col_count, season)
-            col_count += 1
-
-        if "FullName" in cols:
-            sheet.write(player_counter, col_count, player['fullName'])
-            col_count += 1
-
-        if "FirstName" in cols:
-            sheet.write(player_counter, col_count, player['firstName'])
-            col_count += 1
-
-        if "LastName" in cols:
-            sheet.write(player_counter, col_count, player['lastName'])
-            col_count += 1
-
-        if "BirthDate" in cols:
-            sheet.write(player_counter, col_count, player['birthDate'])
-            col_count += 1
-
-        if "Age" in cols:
-            sheet.write(player_counter, col_count, player['currentAge'])
-            col_count += 1
-
-        if "Height" in cols:
-            sheet.write(player_counter, col_count, player['height'])
-            col_count += 1
-
-        if "Weight" in cols:
-            sheet.write(player_counter, col_count, player['weight'])
-            col_count += 1
-
-        if "TeamID" in cols:
-            sheet.write(player_counter, col_count, player['currentTeam']['id'])
-            col_count += 1
-
-        if "Position" in cols:
-            sheet.write(player_counter, col_count, player['primaryPosition']['abbreviation'])
-            col_count += 1
-
-        if "DebutDate" in cols:
-            sheet.write(player_counter, col_count, player['mlbDebutDate'])
-            col_count += 1
-
-        if "BatSide" in cols:
-            sheet.write(player_counter, col_count, player['batSide']['code'])
-            col_count += 1
-
-        if "PitchHand" in cols:
-            sheet.write(player_counter, col_count, player['pitchHand']['code'])
-            col_count += 1
-
-        #player_ids.append(player['id'])
-        player_counter += 1
-    book.save("data/" + str(season) + "-Player.xls")
-
-
-# Games
-def export_game_data(season, cols):
-
-    book = xlwt.Workbook(encoding="utf-8")
-    sheet = book.add_sheet("Game")
-    #cols = ["GameID", "GameDate", "Status", "AwayTeamID", "AwayTeamScore", "AwayTeamRecordWins", "AwayTeamRecordLosses",
-            #"AwayTeamRecordPct", "HomeTeamID", "HomeTeamScore", "HomeTeamRecordWins", "HomeTeamRecordLosses", "HomeTeamRecordPct",
-            #"VenueID", "Season", "DayNight", "GamesInSeries", "SeriesGameNumber", "SeriesDescription"]
-    for i in range(len(cols)):
-        sheet.write(0, i, cols[i])
-
-    date_format = xlwt.XFStyle()
-    date_format.num_format_str = 'yyyy/mm/dd h:mm'    
-    from_zone = tz.gettz('UTC')
-    to_zone = tz.gettz('America/Los_Angeles')
-
-    for date_range in date_ranges:
-        if date_range['season'] == season:
-            start_date = date_range['start_date']
-            end_date = date_range['end_date']
-
-    url = "https://statsapi.mlb.com/api/v1/schedule?startDate=" + start_date + "&endDate=" + end_date + "&sportId=1"
-    print("Getting game data from " + url)
-    games = requests.get(url).json()
-    for date in games['dates']:
-        for game in date['games']:
-            if game['status']['codedGameState'] == 'F' and game['gamePk'] not in game_ids:
-
-                if game['status']['detailedState'] == 'Completed Early':
-                    finished_early_ids.append(game['gamePk'])
-
-                sheet.write(game_counter, 0, game['gamePk'])
-
-                utc = datetime.strptime(game['gameDate'], '%Y-%m-%dT%H:%M:%SZ')
-                utc = utc.replace(tzinfo=from_zone)
-                pst = utc.astimezone(to_zone)
-                pst = pst.replace(tzinfo=None)
-                sheet.write(game_counter, 1, pst, date_format)
-
-                sheet.write(game_counter, 2, game['status']['detailedState'])
-                sheet.write(game_counter, 3, game['teams']['away']['team']['id'])
-                sheet.write(game_counter, 4, game['teams']['away']['score'])
-                sheet.write(game_counter, 5, game['teams']['away']['leagueRecord']['wins'])
-                sheet.write(game_counter, 6, game['teams']['away']['leagueRecord']['losses'])
-                sheet.write(game_counter, 7, game['teams']['away']['leagueRecord']['pct'])         
-                sheet.write(game_counter, 8, game['teams']['home']['team']['id'])
-                sheet.write(game_counter, 9, game['teams']['home']['score'])
-                sheet.write(game_counter, 10, game['teams']['home']['leagueRecord']['wins'])
-                sheet.write(game_counter, 11, game['teams']['home']['leagueRecord']['losses'])
-                sheet.write(game_counter, 12, game['teams']['home']['leagueRecord']['pct'])
-                sheet.write(game_counter, 13, game['venue']['id'])
-                sheet.write(game_counter, 14, game['seasonDisplay'])
-                sheet.write(game_counter, 15, game['dayNight'])
-                sheet.write(game_counter, 16, game['gamesInSeries'])
-                sheet.write(game_counter, 17, game['seriesGameNumber'])
-                sheet.write(game_counter, 18, game['seriesDescription'])
-                game_ids.append(game['gamePk'])
-                game_counter += 1
+        if player['id'] not in player_ids:
+            sheet.write(player_counter, 0, player['id'])
+            sheet.write(player_counter, 1, player['fullName'])
+            sheet.write(player_counter, 2, player['firstName'])
+            sheet.write(player_counter, 3, player['lastName'])
+            sheet.write(player_counter, 4, player['birthDate'])
+            sheet.write(player_counter, 5, player['currentTeam']['id'])
+            sheet.write(player_counter, 6, player['primaryPosition']['abbreviation'])
+            sheet.write(player_counter, 7, player['mlbDebutDate'])
+            sheet.write(player_counter, 8, player['batSide']['code'])
+            sheet.write(player_counter, 9, player['pitchHand']['code'])
+            player_ids.append(player['id'])
+            player_counter += 1
         sleep(10)
-    book.save('data/Game.xls')
-
+    book.save("data/" + season + "-Player.xls")
 
 def export_venue_data():
     url = "https://statsapi.mlb.com/api/v1/venues"
@@ -160,7 +53,6 @@ def export_venue_data():
         sheet.write(venue_counter, 1, venue["name"])
         venue_counter += 1
     book.save("data/Venue.xls")
-
 
 # Teams
 def export_team_data():
@@ -216,6 +108,71 @@ def export_schedule_data():
             sheet.write(game_counter, 4, game['venue']['id'])
             game_counter += 1
     book.save("data/Schedule.xls")
+
+
+# Games
+def export_game_data(seasons):
+
+    book = xlwt.Workbook(encoding="utf-8")
+    sheet = book.add_sheet("Game")
+    cols = ["GameID", "GameDate", "Status", "AwayTeamID", "AwayTeamScore", "AwayTeamRecordWins", "AwayTeamRecordLosses",
+            "AwayTeamRecordPct", "HomeTeamID", "HomeTeamScore", "HomeTeamRecordWins", "HomeTeamRecordLosses", "HomeTeamRecordPct",
+            "VenueID", "Season", "DayNight", "GamesInSeries", "SeriesGameNumber", "SeriesDescription"]
+    for i in range(len(cols)):
+        sheet.write(0, i, cols[i])
+
+    date_format = xlwt.XFStyle()
+    date_format.num_format_str = 'yyyy/mm/dd h:mm'    
+    from_zone = tz.gettz('UTC')
+    to_zone = tz.gettz('America/Los_Angeles')
+
+    finished_early_ids = []
+    game_counter = 1
+    for season in seasons:
+        for date_range in date_ranges:
+            if date_range['season'] == season:
+                start_date = date_range['start_date']
+                end_date = date_range['end_date']
+
+        url = "https://statsapi.mlb.com/api/v1/schedule?startDate=" + start_date + "&endDate=" + end_date + "&sportId=1"
+        print("Getting game data from " + url)
+        games = requests.get(url).json()
+        for date in games['dates']:
+            for game in date['games']:
+                if game['status']['codedGameState'] == 'F' and game['gamePk'] not in game_ids:
+
+                    if game['status']['detailedState'] == 'Completed Early':
+                        finished_early_ids.append(game['gamePk'])
+
+                    sheet.write(game_counter, 0, game['gamePk'])
+
+                    utc = datetime.strptime(game['gameDate'], '%Y-%m-%dT%H:%M:%SZ')
+                    utc = utc.replace(tzinfo=from_zone)
+                    pst = utc.astimezone(to_zone)
+                    pst = pst.replace(tzinfo=None)
+                    sheet.write(game_counter, 1, pst, date_format)
+
+                    sheet.write(game_counter, 2, game['status']['detailedState'])
+                    sheet.write(game_counter, 3, game['teams']['away']['team']['id'])
+                    sheet.write(game_counter, 4, game['teams']['away']['score'])
+                    sheet.write(game_counter, 5, game['teams']['away']['leagueRecord']['wins'])
+                    sheet.write(game_counter, 6, game['teams']['away']['leagueRecord']['losses'])
+                    sheet.write(game_counter, 7, game['teams']['away']['leagueRecord']['pct'])         
+                    sheet.write(game_counter, 8, game['teams']['home']['team']['id'])
+                    sheet.write(game_counter, 9, game['teams']['home']['score'])
+                    sheet.write(game_counter, 10, game['teams']['home']['leagueRecord']['wins'])
+                    sheet.write(game_counter, 11, game['teams']['home']['leagueRecord']['losses'])
+                    sheet.write(game_counter, 12, game['teams']['home']['leagueRecord']['pct'])
+                    sheet.write(game_counter, 13, game['venue']['id'])
+                    sheet.write(game_counter, 14, game['seasonDisplay'])
+                    sheet.write(game_counter, 15, game['dayNight'])
+                    sheet.write(game_counter, 16, game['gamesInSeries'])
+                    sheet.write(game_counter, 17, game['seriesGameNumber'])
+                    sheet.write(game_counter, 18, game['seriesDescription'])
+                    game_ids.append(game['gamePk'])
+                    game_counter += 1
+        sleep(10)
+    book.save('data/Game.xls')
 
 
 # Play By Play

@@ -1,10 +1,10 @@
 from PyQt5.QtCore import QDateTime, Qt, QTimer, QRect
-from PyQt5.QtWidgets import (QApplication, QCheckBox, QComboBox, QDateTimeEdit,
-        QDial, QDialog, QFileDialog, QGridLayout, QGroupBox, QHBoxLayout, QLabel, QLineEdit,
-        QProgressBar, QPushButton, QRadioButton, QScrollBar, QSizePolicy,
-        QSlider, QSpinBox, QStyleFactory, QTableWidget, QTabWidget, QTextEdit,
-        QVBoxLayout, QWidget)
+from PyQt5.QtWidgets import (QApplication, QCheckBox, QComboBox, QDateTimeEdit, QDial, QDialog, QFileDialog, QGridLayout, QGroupBox, QHBoxLayout, QLabel, QLineEdit, QMessageBox,
+    QProgressBar, QPushButton, QRadioButton, QScrollBar, QSizePolicy, QSlider, QSpinBox, QStyleFactory, QTableWidget, QTabWidget, QTextEdit, QVBoxLayout, QWidget)
 from PyQt5.QtGui import QPalette, QColor
+from threading import Thread
+from time import sleep
+import fetch as fetch
 
 
 class WidgetGallery(QDialog):
@@ -14,6 +14,10 @@ class WidgetGallery(QDialog):
         QApplication.setStyle(QStyleFactory.create('Fusion'))
         QApplication.setPalette(QApplication.style().standardPalette())
 
+        self.tabGroupboxes = []
+        self.savePath = ""
+
+        self.setDarkMode()
         self.createSeasonsGroupBox()
         self.createExportGroupBox()
         self.createLogGroupBox()
@@ -21,34 +25,7 @@ class WidgetGallery(QDialog):
         self.createRequestsGroupBox()
         self.createProgressBar()
 
-        self.path = ""
-
-        topLayout = QHBoxLayout()
-        seasons = ["2005", "2006", "2007", "2008", "2009", "2010", "2011", "2012", "2013", "2014", "2015", "2016", "2017", "2018", "2019"]
-        seasonsBeginComboBox = QComboBox()
-        seasonsBeginComboBox.addItems(seasons)
-        seasonsEndComboBox = QComboBox()
-        seasonsEndComboBox.addItems(seasons)
-        seasonsLabel = QLabel("Seasons:")
-        seasonsLabel.setGeometry(QRect(10, 10, 20, 20))
-        seasonsLabel.setBuddy(seasonsBeginComboBox)
-        toLabel = QLabel("to")
-        toLabel.setGeometry(QRect(70, 10, 20, 20))
-        toLabel.setBuddy(seasonsEndComboBox)
-        topLayout.addWidget(seasonsLabel)
-        topLayout.addWidget(seasonsBeginComboBox)
-        topLayout.addWidget(toLabel)
-        topLayout.addWidget(seasonsEndComboBox)
-        topLayout.addStretch(1)
-
         mainLayout = QGridLayout()
-        # mainLayout.addLayout(topLayout, 0, 0, 1, 2)
-        # mainLayout.addWidget(self.schemaTabWidget, 1, 0, 3, 1)
-        # mainLayout.addWidget(self.seasonsGroupBox, 1, 1, 1, 1)
-        # mainLayout.addWidget(self.exportGroupBox, 2, 1, 1, 1)
-        # mainLayout.addWidget(self.requestsGroupBox, 3, 1, 1, 1)
-        # mainLayout.addWidget(self.logGroupBox, 4, 0, 1, 2)
-        # mainLayout.addWidget(self.progressBar, 5, 0, 1, 2)
         mainLayout.addWidget(self.schemaGroupBox, 0, 0, 3, 1)
         mainLayout.addWidget(self.seasonsGroupBox, 0, 1, 1, 1)
         mainLayout.addWidget(self.exportGroupBox, 1, 1, 1, 1)
@@ -59,8 +36,10 @@ class WidgetGallery(QDialog):
         mainLayout.setRowStretch(2, 1)
         mainLayout.setColumnStretch(0, 1)
         mainLayout.setColumnStretch(1, 1)
+        self.setLayout(mainLayout)
+        self.setWindowTitle("MLB Data Fetch")
 
-        # Dark mode
+    def setDarkMode(self):
         palette = QPalette()
         palette.setColor(QPalette.Window, QColor(53, 53, 53))
         palette.setColor(QPalette.WindowText, Qt.white)
@@ -77,12 +56,71 @@ class WidgetGallery(QDialog):
         palette.setColor(QPalette.HighlightedText, Qt.black)
         app.setPalette(palette)
 
-        self.setLayout(mainLayout)
-        self.setWindowTitle("MLB Data Fetch")
-
     def chooseFilePath(self):
-        self.path = str(QFileDialog.getExistingDirectory(self, "Select Directory"))
-        self.pathLabel.setText(self.path)
+        self.savePath = str(QFileDialog.getExistingDirectory(self, "Select Directory"))
+        self.savePathLabel.setText(self.savePath)
+
+    def validateSettings(self):
+        error = ""
+        if int(self.seasonsBeginComboBox.currentText()) > int(self.seasonsEndComboBox.currentText()):
+            error += "Invalid seasons range.\n"
+        if self.savePath == "":
+            error += "No save directory chosen.\n"
+
+        if error != "":
+            msgbox = QMessageBox()
+            msgbox.setFixedWidth(800)
+            msgbox.setWindowTitle("Error")
+            msgbox.setIcon(QMessageBox.Critical)
+            msgbox.setText(error)
+            msgbox.exec_()
+            return False
+        else:
+            return True
+
+    def fetchData(self):
+        tables = []
+        for groupbox in self.tabGroupboxes:
+            if groupbox.isChecked():
+                table = groupbox.objectName()
+                cols = []
+                checkboxes = groupbox.findChildren(QWidget)
+                for checkbox in checkboxes:
+                    if checkbox.isChecked():
+                        cols.append(checkbox.objectName())
+                tables.append({"tableName": table, "cols": cols})
+
+        seasons = []
+        for i in range(int(self.seasonsBeginComboBox.currentText()), int(self.seasonsEndComboBox.currentText())+1):
+            seasons.append(i)
+
+        for season in seasons:
+            for table in tables:
+                if table["tableName"] == "Player":
+                    fetch.export_player_data(season, table["cols"])
+                    #sleep(10)
+                # if table["tableName"] == "Team":
+                #     fetch.export_team_data(season, table["cols"])
+                #     sleep(10)
+                # if table["tableName"] == "Venue":
+                #     fetch.export_venue_data(season, table["cols"])
+                #     sleep(10)
+                # if table["tableName"] == "Game":
+                #     fetch.export_game_data(season, table["cols"])
+                #     sleep(10)
+                # if table["PlayByPlay"] == "PlayByPlay":
+                #     fetch.export_game_data(season, table["cols"])
+                #     sleep(10)
+                # if table["Schedule"] == "Schedule":
+                #     fetch.export_game_data(season, table["cols"])
+                #     sleep(10)
+
+
+    def goButtonClicked(self):
+        validSettings = self.validateSettings()
+        if validSettings:
+            thread = Thread(target=self.fetchData, daemon=True)
+            thread.start()
 
     def advanceProgressBar(self):
         curVal = self.progressBar.value()
@@ -93,22 +131,21 @@ class WidgetGallery(QDialog):
         self.seasonsGroupBox = QGroupBox("Seasons")
         topLayout = QHBoxLayout()
         seasons = ["2005", "2006", "2007", "2008", "2009", "2010", "2011", "2012", "2013", "2014", "2015", "2016", "2017", "2018", "2019"]
-        seasonsBeginComboBox = QComboBox()
-        seasonsBeginComboBox.addItems(seasons)
-        seasonsEndComboBox = QComboBox()
-        seasonsEndComboBox.addItems(seasons)
+        self.seasonsBeginComboBox = QComboBox()
+        self.seasonsBeginComboBox.addItems(seasons)
+        self.seasonsEndComboBox = QComboBox()
+        self.seasonsEndComboBox.addItems(seasons)
         seasonsLabel = QLabel("Range:")
         seasonsLabel.setGeometry(QRect(10, 10, 20, 20))
-        seasonsLabel.setBuddy(seasonsBeginComboBox)
+        seasonsLabel.setBuddy(self.seasonsBeginComboBox)
         toLabel = QLabel("to")
         toLabel.setGeometry(QRect(70, 10, 20, 20))
-        toLabel.setBuddy(seasonsEndComboBox)
+        toLabel.setBuddy(self.seasonsEndComboBox)
         topLayout.addWidget(seasonsLabel)
-        topLayout.addWidget(seasonsBeginComboBox)
+        topLayout.addWidget(self.seasonsBeginComboBox)
         topLayout.addWidget(toLabel)
-        topLayout.addWidget(seasonsEndComboBox)
+        topLayout.addWidget(self.seasonsEndComboBox)
         topLayout.addStretch(1)
- 
         seasonsLayout = QGridLayout()
         seasonsLayout.addLayout(topLayout, 0, 0, 1, 1)
         self.seasonsGroupBox.setLayout(seasonsLayout)   
@@ -117,15 +154,13 @@ class WidgetGallery(QDialog):
         self.exportGroupBox = QGroupBox("Export")
         pathButton = QPushButton("Choose file path")
         pathButton.clicked.connect(self.chooseFilePath)
-        self.pathLabel = QLabel("")
-
+        self.savePathLabel = QLabel("")
         radioButton1 = QRadioButton(".xls")
         radioButton2 = QRadioButton(".csv")
         radioButton1.setChecked(True)
-
         layout = QVBoxLayout()
         layout.addWidget(pathButton)
-        layout.addWidget(self.pathLabel)
+        layout.addWidget(self.savePathLabel)
         layout.addWidget(radioButton1)
         layout.addWidget(radioButton2)
         layout.addStretch(1)
@@ -143,33 +178,12 @@ class WidgetGallery(QDialog):
     def createSchemaTabWidget(self):
         self.schemaGroupBox = QGroupBox("Data")
         layout = QVBoxLayout()
-        
-
-
         self.schemaTabWidget = QTabWidget()
         self.schemaTabWidget.setMinimumHeight(300)
         self.schemaTabWidget.setMinimumWidth(380)
-
-        # player_tab = QWidget()
-        # player_tab_vbox = QVBoxLayout()
-        # player_tab_vbox.setContentsMargins(5, 20, 5, 5)
-        # player_groupbox = QGroupBox("Player")
-        # player_groupbox.setCheckable(True)
-        # player_groupbox.setChecked(True)
-        # player_groupbox.setContentsMargins(5, 5, 5, 5)
-        # player_props = ["PlayerID", "Season", "FullName", "FirstName", "LastName", "BirthDate",
-        #                 "Age", "Height", "Weight", "TeamID", "Position", "DebutDate", "BatSide", "PitchHand"]
-        # for i in range(len(player_props)):
-        #     checkbox = QCheckBox(player_groupbox)
-        #     checkbox.setGeometry(QRect(25, 25+(20*i), 100, 17))
-        #     checkbox.setObjectName(player_props[i])
-        #     checkbox.setText(player_props[i])
-        #     checkbox.setChecked(True)
-        # player_tab_vbox.addWidget(player_groupbox)
-        # player_tab.setLayout(player_tab_vbox)
         
-        tabs = ["Player", "Team", "Venue", "Game", "PlayByPlay", "Schedule"]
-        props = [
+        self.tabs = ["Player", "Team", "Venue", "Game", "PlayByPlay", "Schedule"]
+        self.props = [
             ["PlayerID", "Season", "FullName", "FirstName", "LastName", "BirthDate", "Age", "Height", "Weight", "TeamID", "Position", "DebutDate", "BatSide", "PitchHand"],
             ["TeamID", "Name", "VenueID", "Abbreviation", "LocationName", "LeagueID", "DivisionID"],
             ["VenueID", "Name"],
@@ -178,15 +192,17 @@ class WidgetGallery(QDialog):
             ["GameID", "GameDate", "AwayTeamID", "HomeTeamID", "VenueID"]
         ]
 
-        for i in range(len(tabs)):
+        for i in range(len(self.tabs)):
             tab = QWidget()
-            tab_vbox = QVBoxLayout()
-            tab_vbox.setContentsMargins(5, 5, 5, 5)
-            tab_groupbox = QGroupBox(tabs[i])
-            tab_groupbox.setCheckable(True)
-            tab_groupbox.setChecked(True)
-            tab_groupbox.setContentsMargins(5, 5, 5, 5)
-            cols = props[i]
+            tabVbox = QVBoxLayout()
+            tabVbox.setContentsMargins(5, 5, 5, 5)
+            tabGroupbox = QGroupBox(self.tabs[i])
+            tabGroupbox.setObjectName(self.tabs[i])
+            tabGroupbox.setCheckable(True)
+            tabGroupbox.setChecked(True)
+            tabGroupbox.setContentsMargins(5, 5, 5, 5)
+            self.tabGroupboxes.append(tabGroupbox)
+            cols = self.props[i]
             x_offset = 0
             y_multiplier = 0
 
@@ -194,16 +210,16 @@ class WidgetGallery(QDialog):
                 if j == 10:
                     x_offset = 175
                     y_multiplier = 0
-                checkbox = QCheckBox(tab_groupbox)
+                checkbox = QCheckBox(tabGroupbox)
                 checkbox.setGeometry(QRect(20+x_offset, 35+(20*y_multiplier), 150, 17))
                 checkbox.setObjectName(cols[j])
                 checkbox.setText(cols[j])
                 checkbox.setChecked(True)
                 y_multiplier += 1
 
-            tab_vbox.addWidget(tab_groupbox)
-            tab.setLayout(tab_vbox)
-            self.schemaTabWidget.addTab(tab, tabs[i])
+            tabVbox.addWidget(tabGroupbox)
+            tab.setLayout(tabVbox)
+            self.schemaTabWidget.addTab(tab, self.tabs[i])
 
         layout.addWidget(self.schemaTabWidget)
         self.schemaGroupBox.setLayout(layout)
@@ -241,6 +257,7 @@ class WidgetGallery(QDialog):
         goButton = QPushButton("Go")
         goButton.setMinimumHeight(30)
         goButton.setMinimumWidth(300)
+        goButton.clicked.connect(lambda: self.goButtonClicked())
         bottomLayout.addWidget(goButton)
 
         requestsLayout = QGridLayout()
@@ -253,16 +270,13 @@ class WidgetGallery(QDialog):
         self.progressBar = QProgressBar()
         self.progressBar.setRange(0, 10000)
         self.progressBar.setValue(0)
-
         timer = QTimer(self)
         timer.timeout.connect(self.advanceProgressBar)
         timer.start(1000)
 
 
 if __name__ == '__main__':
-
     import sys
-
     app = QApplication(sys.argv)
     gallery = WidgetGallery()
     gallery.show()
