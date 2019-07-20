@@ -204,7 +204,7 @@ class WidgetGallery(QDialog):
             ["PlayerID", "Season", "FullName", "FirstName", "LastName", "BirthDate", "Age", "Height", "Weight", "TeamID", "Position", "DebutDate", "BatSide", "PitchHand"],
             ["GameID", "GameDate", "AwayTeamID", "HomeTeamID", "VenueID"],
             ["GameID", "Season", "GameDate", "Status", "AwayTeamID", "AwayTeamRecordWins", "AwayTeamRecordLosses", "AwayTeamRecordPct", "HomeTeamID", "HomeTeamScore", "HomeTeamRecordWins", "HomeTeamRecordLosses", "HomeTeamRecordPct", "VenueID", "DayNight", "GamesInSeries", "SeriesGameNumber", "SeriesDescription"],
-            ["PlayByPlayID", "GameID", "BatterID", "BatSide", "BatterSplit", "PitcherID", "PitchHand", "MenOnBase", "Event", "EventType", "IsScoringPlay", "AwayTeamScore", "HomeTeamScore", "AtBatIndex", "HalfInning", "Inning", "Outs"]
+            ["PlayByPlayID", "GameID", "BatterID", "BatSide", "PitcherID", "PitchHand", "MenOnBase", "Event", "EventType", "IsScoringPlay", "AwayTeamScore", "HomeTeamScore", "AtBatIndex", "HalfInning", "Inning", "Outs"]
         ]
 
         for i in range(len(self.tabs)):

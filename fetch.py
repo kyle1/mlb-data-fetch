@@ -131,7 +131,10 @@ def export_player_data(season, cols, path):
             sheet.write(player_counter, col_count, player['weight'])
             col_count += 1
         if "TeamID" in cols:
-            sheet.write(player_counter, col_count, player['currentTeam']['id'])
+            if ('id' in player['currentTeam']):
+                sheet.write(player_counter, col_count, player['currentTeam']['id'])
+            else:
+                sheet.write(player_counter, col_count, "")
             col_count += 1
         if "Position" in cols:
             sheet.write(player_counter, col_count, player['primaryPosition']['abbreviation'])
@@ -362,10 +365,10 @@ def export_pbp_data(season, cols, min_sec, max_sec, path):
                     if "IsScoringPlay" in cols:
                         sheet.write(pbp_counter, col_count, play['about']['isScoringPlay'])
                         col_count += 1
-                    if "AwayScore" in cols:
+                    if "AwayTeamScore" in cols:
                         sheet.write(pbp_counter, col_count, play['result']['awayScore'])
                         col_count += 1
-                    if "HomeScore" in cols:
+                    if "HomeTeamScore" in cols:
                         sheet.write(pbp_counter, col_count, play['result']['homeScore'])
                         col_count += 1
                     if "AtBatIndex" in cols:
@@ -384,4 +387,4 @@ def export_pbp_data(season, cols, min_sec, max_sec, path):
             print(str("Finished writing game " + str(game_id) + ". " + str(game_counter) + " out of " + str(len(book_game_ids)) + " games finished."))
             game_counter += 1
             sleep(randint(min_sec,max_sec))
-    book.save(path + "/PlayByPlay" + str(season) + "_" + str(book_count) + ".xls")
+        book.save(path + "/PlayByPlay" + str(season) + "_" + str(book_count) + ".xls")
