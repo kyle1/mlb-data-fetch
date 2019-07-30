@@ -5,6 +5,7 @@ from threading import Thread
 from time import sleep
 from random import randint
 import fetch as fetch
+import fetch_csv as fetch_csv
 
 
 class WidgetGallery(QDialog):
@@ -98,35 +99,69 @@ class WidgetGallery(QDialog):
 
         minSec = self.minSpinBox.value()
         maxSec = self.maxSpinBox.value()
-        for table in tables:
-            # Team and Venue are not based on season, so just get this data once
-            if table["tableName"] == "Team":
-                fetch.export_team_data(table["cols"], self.savePath)
-                self.logMessages += "Team data written to " + self.savePath + "/Team.xls\n"
-                sleep(randint(minSec, maxSec))
-            if table["tableName"] == "Venue":
-                fetch.export_venue_data(table["cols"], self.savePath)
-                self.logMessages += "Venue data written to " + self.savePath + "/Venue.xls\n"
-                sleep(randint(minSec, maxSec))
 
-        for season in seasons:
+
+        csv = True
+        if csv:
             for table in tables:
-                if table["tableName"] == "Player":
-                    fetch.export_player_data(season, table["cols"], self.savePath)
-                    self.logMessages += "Player data written to " + self.savePath + "/Player" + str(season) + ".xls\n"
+                # Team and Venue are not based on season, so just get this data once
+                if table["tableName"] == "Team":
+                    fetch_csv.export_team_data(table["cols"], self.savePath)
+                    self.logMessages += "Team data written to " + self.savePath + "/Team.csv\n"
                     sleep(randint(minSec, maxSec))
-                if table["tableName"] == "Schedule":
-                    fetch.export_schedule_data(season, table["cols"], self.savePath)
-                    self.logMessages += "Schedule data written to " + self.savePath + "/Schedule" + str(season) + ".xls\n"
+                if table["tableName"] == "Venue":
+                    fetch_csv.export_venue_data(table["cols"], self.savePath)
+                    self.logMessages += "Venue data written to " + self.savePath + "/Venue.csv\n"
                     sleep(randint(minSec, maxSec))
-                if table["tableName"] == "Game":
-                    fetch.export_game_data(season, table["cols"], self.savePath)
-                    self.logMessages += "Game data written to " + self.savePath + "/Game" + str(season) + ".xls\n"
+
+            for season in seasons:
+                for table in tables:
+                    if table["tableName"] == "Player":
+                        fetch_csv.export_player_data(season, table["cols"], self.savePath)
+                        self.logMessages += "Player data written to " + self.savePath + "/Player" + str(season) + ".csv\n"
+                        sleep(randint(minSec, maxSec))
+                    if table["tableName"] == "Schedule":
+                        fetch_csv.export_schedule_data(season, table["cols"], self.savePath)
+                        self.logMessages += "Schedule data written to " + self.savePath + "/Schedule" + str(season) + ".csv\n"
+                        sleep(randint(minSec, maxSec))
+                    if table["tableName"] == "Game":
+                        fetch_csv.export_game_data(season, table["cols"], self.savePath)
+                        self.logMessages += "Game data written to " + self.savePath + "/Game" + str(season) + ".csv\n"
+                        sleep(randint(minSec, maxSec))
+                    if table["tableName"] == "PlayByPlay":
+                        fetch_csv.export_pbp_data(season, table["cols"], minSec, maxSec, self.savePath)
+                        self.logMessages += "PlayByPlay data written to " + self.savePath + "/PlayByPlay" + str(season) + ".csv\n"
+                        sleep(randint(minSec, maxSec))
+        else:
+            for table in tables:
+                # Team and Venue are not based on season, so just get this data once
+                if table["tableName"] == "Team":
+                    fetch.export_team_data(table["cols"], self.savePath)
+                    self.logMessages += "Team data written to " + self.savePath + "/Team.xls\n"
                     sleep(randint(minSec, maxSec))
-                if table["tableName"] == "PlayByPlay":
-                    fetch.export_pbp_data(season, table["cols"], minSec, maxSec, self.savePath)
-                    self.logMessages += "PlayByPlay data written to " + self.savePath + "/PlayByPlay" + str(season) + ".xls\n"
+                if table["tableName"] == "Venue":
+                    fetch.export_venue_data(table["cols"], self.savePath)
+                    self.logMessages += "Venue data written to " + self.savePath + "/Venue.xls\n"
                     sleep(randint(minSec, maxSec))
+
+            for season in seasons:
+                for table in tables:
+                    if table["tableName"] == "Player":
+                        fetch.export_player_data(season, table["cols"], self.savePath)
+                        self.logMessages += "Player data written to " + self.savePath + "/Player" + str(season) + ".xls\n"
+                        sleep(randint(minSec, maxSec))
+                    if table["tableName"] == "Schedule":
+                        fetch.export_schedule_data(season, table["cols"], self.savePath)
+                        self.logMessages += "Schedule data written to " + self.savePath + "/Schedule" + str(season) + ".xls\n"
+                        sleep(randint(minSec, maxSec))
+                    if table["tableName"] == "Game":
+                        fetch.export_game_data(season, table["cols"], self.savePath)
+                        self.logMessages += "Game data written to " + self.savePath + "/Game" + str(season) + ".xls\n"
+                        sleep(randint(minSec, maxSec))
+                    if table["tableName"] == "PlayByPlay":
+                        fetch.export_pbp_data(season, table["cols"], minSec, maxSec, self.savePath)
+                        self.logMessages += "PlayByPlay data written to " + self.savePath + "/PlayByPlay" + str(season) + ".xls\n"
+                        sleep(randint(minSec, maxSec))
 
 
     def goButtonClicked(self):
@@ -203,7 +238,7 @@ class WidgetGallery(QDialog):
             ["VenueID", "Name"],
             ["PlayerID", "Season", "FullName", "FirstName", "LastName", "BirthDate", "Age", "Height", "Weight", "TeamID", "Position", "DebutDate", "BatSide", "PitchHand"],
             ["GameID", "GameDate", "AwayTeamID", "HomeTeamID", "VenueID"],
-            ["GameID", "Season", "GameDate", "Status", "AwayTeamID", "AwayTeamRecordWins", "AwayTeamRecordLosses", "AwayTeamRecordPct", "HomeTeamID", "HomeTeamScore", "HomeTeamRecordWins", "HomeTeamRecordLosses", "HomeTeamRecordPct", "VenueID", "DayNight", "GamesInSeries", "SeriesGameNumber", "SeriesDescription"],
+            ["GameID", "Season", "GameDate", "Status", "AwayTeamID", "AwayTeamScore", "AwayTeamRecordWins", "AwayTeamRecordLosses", "AwayTeamRecordPct", "HomeTeamID", "HomeTeamScore", "HomeTeamRecordWins", "HomeTeamRecordLosses", "HomeTeamRecordPct", "VenueID", "DayNight", "GamesInSeries", "SeriesGameNumber", "SeriesDescription"],
             ["PlayByPlayID", "GameID", "BatterID", "BatSide", "PitcherID", "PitchHand", "MenOnBase", "Event", "EventType", "IsScoringPlay", "AwayTeamScore", "HomeTeamScore", "AtBatIndex", "HalfInning", "Inning", "Outs"]
         ]
 
