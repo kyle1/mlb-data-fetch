@@ -23,7 +23,8 @@ date_ranges = [
     {'season': 2016, 'start_date': '04/03/2016', 'end_date': '11/02/2016'},
     {'season': 2017, 'start_date': '04/02/2017', 'end_date': '11/01/2017'},
     {'season': 2018, 'start_date': '03/29/2018', 'end_date': '10/28/2018'},
-    {'season': 2019, 'start_date': '03/28/2019', 'end_date': datetime.today().strftime('%m/%d/%Y')}]
+    #{'season': 2019, 'start_date': '03/28/2019', 'end_date': datetime.today().strftime('%m/%d/%Y')}]
+    {'season': 2019, 'start_date': '03/28/2019', 'end_date': '11/01/2019'}]
 
 # Teams
 def export_team_data(cols, path):
@@ -35,23 +36,20 @@ def export_team_data(cols, path):
         teams = requests.get(url).json()
         for team in teams['teams']:
             row = []
-            if "TeamID" in cols:
+            if "MlbTeamID" in cols:
                 row.append(team['id'])
-            if "Name" in cols:
-                row.append(team['name'])
-            if "VenueID" in cols:
+            if "TeamName" in cols:
+                row.append(team['teamName'])
+            if "MlbVenueID" in cols:
                 row.append(team['venue']['id'])
             if "TeamCode" in cols:
                 row.append(team['teamCode'])
-            if "Abbreviation" in cols:
+            if "TeamAbbrev" in cols:
                 row.append(team['abbreviation'])
-            if "TeamName" in cols:
-                row.append(team['teamName'])
-            if "LocationName" in cols:
                 row.append(team['locationName'])
-            if "LeagueID" in cols:
+            if "MlbLeagueID" in cols:
                 row.append(team['league']['id'])
-            if "DivisionID" in cols:
+            if "MlbDivisionID" in cols:
                 row.append(team['division']['id'])
             f.writerow(row)
 
@@ -65,9 +63,9 @@ def export_venue_data(cols, path):
         venues = requests.get(url).json()    
         for venue in venues["venues"]:
             row = []
-            if "VenueID" in cols:
+            if "MlbVenueID" in cols:
                 row.append(venue["id"])
-            if "Name" in cols:
+            if "VenueName" in cols:
                 row.append(venue["name"])
             f.writerow(row)
 
@@ -82,7 +80,7 @@ def export_player_data(season, cols, path):
         players = requests.get(url).json()
         for player in players['people']:
             row = []
-            if "PlayerID" in cols:
+            if "MlbPlayerID" in cols:
                 row.append(player['id'])
             if "Season" in cols:
                 row.append(season)
@@ -94,13 +92,11 @@ def export_player_data(season, cols, path):
                 row.append(player['lastName'])
             if "BirthDate" in cols:
                 row.append(player['birthDate'])
-            if "Age" in cols:
-                row.append(player['currentAge'])
-            if "Height" in cols:
+            if "PlayerHeight" in cols:
                 row.append(player['height'])
-            if "Weight" in cols:
+            if "PlayerWeight" in cols:
                 row.append(player['weight'])
-            if "TeamID" in cols:
+            if "MlbTeamID" in cols:
                 if ('id' in player['currentTeam']):
                     row.append(player['currentTeam']['id'])
                 else:
@@ -137,28 +133,43 @@ def export_schedule_data(season, cols, path):
         schedule = requests.get(url).json()
 
         game_ids = []
+        game_counter = 1
         for date in schedule['dates']:
             for game in date['games']:
                 series_desc = game['seriesDescription']
-                if "Training" not in series_desc and "Exhibition" not in series_desc and "All-Star" not in series_desc and game['status']['codedGameState'] == 'F' and game['gamePk'] not in game_ids:
+                if "Training" not in series_desc and "Exhibition" not in series_desc and "All-Star" not in series_desc and game['gamePk'] not in game_ids:
                     row = []
-                    if "GameID" in cols:
+                    if "MlbScheduleID" in cols:
+                        row.append(game_counter)
+                    if "MlbGameID" in cols:
                         row.append(game['gamePk'])
+                    if "GameDateTime" in cols:
+                        utc = datetime.strptime(game['gameDate'], '%Y-%m-%dT%H:%M:%SZ')
+                        utc = utc.replace(tzinfo=from_zone)
+                        pst = utc.astimezone(to_zone)
+                        pst = pst.replace(tzinfo=None)
+                        row.append(pst) #todo: check how the date is formatted in file
                     if "GameDate" in cols:
                         utc = datetime.strptime(game['gameDate'], '%Y-%m-%dT%H:%M:%SZ')
                         utc = utc.replace(tzinfo=from_zone)
                         pst = utc.astimezone(to_zone)
                         pst = pst.replace(tzinfo=None)
-                        #sheet.write(game_counter, col_count, pst, date_format)
-                        row.append(pst) #todo: check how the date is formatted in file
+                        row.append(pst.date())
+                    if "GameTime" in cols:
+                        utc = datetime.strptime(game['gameDate'], '%Y-%m-%dT%H:%M:%SZ')
+                        utc = utc.replace(tzinfo=from_zone)
+                        pst = utc.astimezone(to_zone)
+                        pst = pst.replace(tzinfo=None)
+                        row.append(pst.time())
                     if "AwayTeamID" in cols:
                         row.append(game['teams']['away']['team']['id'])
                     if "HomeTeamID" in cols:
                         row.append(game['teams']['home']['team']['id'])
-                    if "VenueID" in cols:
+                    if "MlbVenueID" in cols:
                         row.append(game['venue']['id'])
                     f.writerow(row)
                     game_ids.append(game['gamePk'])
+                    game_counter += 1
 
 
 # Games
@@ -166,9 +177,7 @@ def export_game_data(season, cols, path):
     with open(path + "/Game" + str(season) + ".csv", mode="w", newline="\n") as f:
         f = csv.writer(f)
         f.writerow(cols)
-
-        #date_format = xlwt.XFStyle()
-        #date_format.num_format_str = 'yyyy/mm/dd h:mm'    
+ 
         from_zone = tz.gettz('UTC')
         to_zone = tz.gettz('America/Los_Angeles')
 
@@ -182,7 +191,6 @@ def export_game_data(season, cols, path):
         games = requests.get(url).json()
 
         game_ids = []
-        game_counter = 1
         for date in games['dates']:
             for game in date['games']:
                 series_desc = game['seriesDescription']
@@ -191,17 +199,28 @@ def export_game_data(season, cols, path):
                     # if game['status']['detailedState'] == 'Completed Early':
                     #     finished_early_ids.append(game['gamePk'])
 
-                    if "GameID" in cols:
+                    if "MlbGameID" in cols:
                         row.append(game['gamePk'])
                     if "Season" in cols:
                         row.append(game['seasonDisplay'])
+                    if "GameDateTime" in cols:
+                        utc = datetime.strptime(game['gameDate'], '%Y-%m-%dT%H:%M:%SZ')
+                        utc = utc.replace(tzinfo=from_zone)
+                        pst = utc.astimezone(to_zone)
+                        pst = pst.replace(tzinfo=None)
+                        row.append(pst)
                     if "GameDate" in cols:
                         utc = datetime.strptime(game['gameDate'], '%Y-%m-%dT%H:%M:%SZ')
                         utc = utc.replace(tzinfo=from_zone)
                         pst = utc.astimezone(to_zone)
                         pst = pst.replace(tzinfo=None)
-                        #sheet.write(game_counter, col_count, pst, date_format)
-                        row.append(pst)
+                        row.append(pst.date())
+                    if "GameTime" in cols:
+                        utc = datetime.strptime(game['gameDate'], '%Y-%m-%dT%H:%M:%SZ')
+                        utc = utc.replace(tzinfo=from_zone)
+                        pst = utc.astimezone(to_zone)
+                        pst = pst.replace(tzinfo=None)
+                        row.append(pst.time())
                     if "Status" in cols:
                         row.append(game['status']['detailedState'])
                     if "AwayTeamID" in cols:
@@ -237,6 +256,284 @@ def export_game_data(season, cols, path):
                     f.writerow(row)
                     game_ids.append(game['gamePk'])
 
+
+# Boxscore (Batting)
+def export_boxscore_data(season, cols, min_sec, max_sec, path):
+    with open(path + "/MlbBoxscoreBatting" + str(season) + ".csv", mode="w", newline="\n") as f:
+        f = csv.writer(f)
+        f.writerow(cols)
+        for date_range in date_ranges:
+            if date_range['season'] == season:
+                start_date = date_range['start_date']
+                end_date = date_range['end_date']
+
+        url = "https://statsapi.mlb.com/api/v1/schedule?startDate=" + start_date + "&endDate=" + end_date + "&sportId=1"
+        print("Getting game data from " + url)
+        games = requests.get(url).json()
+        game_ids = []
+        for date in games['dates']:
+            for game in date['games']:
+                series_desc = game['seriesDescription']
+                if "Training" not in series_desc and "Exhibition" not in series_desc and "All-Star" not in series_desc and game['status']['codedGameState'] == 'F' and game['gamePk'] not in game_ids:
+                    game_ids.append(game['gamePk'])
+
+        boxscore_counter = 1
+        game_counter = 1
+        print("Getting boxscore data for " + str(len(game_ids)) + " games...")
+        for game_id in game_ids:
+            boxscore = requests.get("https://statsapi.mlb.com/api/v1/game/" + str(game_id) + "/boxscore").json()
+            
+            away_id = boxscore['teams']['away']['team']['id']
+            home_id = boxscore['teams']['home']['team']['id']
+
+            for k,v in boxscore['teams']['away']['players'].items():
+                if len(v['stats']['batting']) > 0:
+                    row = []
+                    if "MlbBoxscoreBattingID" in cols:
+                        row.append(boxscore_counter)
+                    if "MlbPlayerID" in cols:
+                        row.append(v['person']['id'])
+                    if "MlbGameID" in cols:
+                        row.append(game_id)
+                    if "AwayTeamID" in cols:
+                        row.append(away_id)
+                    if "HomeTeamID" in cols:
+                        row.append(home_id)
+                    if "IsAway" in cols:
+                        row.append(1)
+                    if "BattingOrder" in cols:
+                        if 'battingOrder' in v:
+                            battingOrder = int(v['battingOrder'].replace('"', ""))
+                            if battingOrder % 100 == 0:
+                                row.append(battingOrder / 100)
+                            else:
+                                row.append(0)
+                        else:
+                            row.append(-1)
+                    if "AB" in cols:
+                        row.append(v['stats']['batting']['atBats'])
+                    if "R" in cols:
+                        row.append(v['stats']['batting']['runs'])
+                    if "H" in cols:
+                        row.append(v['stats']['batting']['hits'])
+                    if "2B" in cols:
+                        row.append(v['stats']['batting']['doubles'])
+                    if "3B" in cols:
+                        row.append(v['stats']['batting']['triples'])
+                    if "HR" in cols:
+                        row.append(v['stats']['batting']['homeRuns'])
+                    if "RBI" in cols:
+                        row.append(v['stats']['batting']['rbi'])
+                    if "BB" in cols:
+                        row.append(v['stats']['batting']['baseOnBalls'])
+                    if "IBB" in cols:
+                        row.append(v['stats']['batting']['intentionalWalks'])
+                    if "SO" in cols:
+                        row.append(v['stats']['batting']['strikeOuts'])
+                    if "HBP" in cols:
+                        row.append(v['stats']['batting']['hitByPitch'])
+                    if "SH" in cols:
+                        row.append(v['stats']['batting']['sacBunts'])
+                    if "SF" in cols:
+                        row.append(v['stats']['batting']['sacFlies'])
+                    if "GDP" in cols:
+                        row.append(v['stats']['batting']['groundIntoDoublePlay'])
+                    if "SB" in cols:
+                        row.append(v['stats']['batting']['stolenBases'])
+                    if "CS" in cols:
+                        row.append(v['stats']['batting']['caughtStealing'])
+                    f.writerow(row)
+                    boxscore_counter += 1
+
+            for k,v in boxscore['teams']['home']['players'].items():
+                if len(v['stats']['batting']) > 0:
+                    row = []
+                    if "MlbBoxscoreBattingID" in cols:
+                        row.append(boxscore_counter)
+                    if "MlbPlayerID" in cols:
+                        row.append(v['person']['id'])
+                    if "MlbGameID" in cols:
+                        row.append(game_id)
+                    if "AwayTeamID" in cols:
+                        row.append(away_id)
+                    if "HomeTeamID" in cols:
+                        row.append(home_id)
+                    if "IsAway" in cols:
+                        row.append(0)
+                    if "BattingOrder" in cols:
+                        battingOrder = int(v['battingOrder'].replace('"', ""))
+                        if battingOrder % 100 == 0:
+                            row.append(battingOrder / 100)
+                        else:
+                            row.append(0)
+                    if "AB" in cols:
+                        row.append(v['stats']['batting']['atBats'])
+                    if "R" in cols:
+                        row.append(v['stats']['batting']['runs'])
+                    if "H" in cols:
+                        row.append(v['stats']['batting']['hits'])
+                    if "2B" in cols:
+                        row.append(v['stats']['batting']['doubles'])
+                    if "3B" in cols:
+                        row.append(v['stats']['batting']['triples'])
+                    if "HR" in cols:
+                        row.append(v['stats']['batting']['homeRuns'])
+                    if "RBI" in cols:
+                        row.append(v['stats']['batting']['rbi'])
+                    if "BB" in cols:
+                        row.append(v['stats']['batting']['baseOnBalls'])
+                    if "IBB" in cols:
+                        row.append(v['stats']['batting']['intentionalWalks'])
+                    if "SO" in cols:
+                        row.append(v['stats']['batting']['strikeOuts'])
+                    if "HBP" in cols:
+                        row.append(v['stats']['batting']['hitByPitch'])
+                    if "SH" in cols:
+                        row.append(v['stats']['batting']['sacBunts'])
+                    if "SF" in cols:
+                        row.append(v['stats']['batting']['sacFlies'])
+                    if "GDP" in cols:
+                        row.append(v['stats']['batting']['groundIntoDoublePlay'])
+                    if "SB" in cols:
+                        row.append(v['stats']['batting']['stolenBases'])
+                    if "CS" in cols:
+                        row.append(v['stats']['batting']['caughtStealing'])
+                    f.writerow(row)
+                    boxscore_counter += 1
+            print(str("Finished writing game " + str(game_id) + ". " + str(game_counter) + " out of " + str(len(game_ids)) + " games finished."))
+            game_counter += 1
+            sleep(randint(min_sec,max_sec))
+
+
+# Boxscore (Pitching)
+def export_boxscore_pitching_data(season, cols, min_sec, max_sec, path):
+    with open(path + "/MlbBoxscorePitching" + str(season) + ".csv", mode="w", newline="\n") as f:
+        f = csv.writer(f)
+        f.writerow(cols)
+        for date_range in date_ranges:
+            if date_range['season'] == season:
+                start_date = date_range['start_date']
+                end_date = date_range['end_date']
+
+        url = "https://statsapi.mlb.com/api/v1/schedule?startDate=" + start_date + "&endDate=" + end_date + "&sportId=1"
+        print("Getting game data from " + url)
+        games = requests.get(url).json()
+        game_ids = []
+        for date in games['dates']:
+            for game in date['games']:
+                series_desc = game['seriesDescription']
+                if "Training" not in series_desc and "Exhibition" not in series_desc and "All-Star" not in series_desc and game['status']['codedGameState'] == 'F' and game['gamePk'] not in game_ids:
+                    game_ids.append(game['gamePk'])
+
+        boxscore_counter = 1
+        game_counter = 1
+        print("Getting boxscore data for " + str(len(game_ids)) + " games...")
+        for game_id in game_ids:
+            boxscore = requests.get("https://statsapi.mlb.com/api/v1/game/" + str(game_id) + "/boxscore").json()
+            
+            away_id = boxscore['teams']['away']['team']['id']
+            home_id = boxscore['teams']['home']['team']['id']
+
+            for k,v in boxscore['teams']['away']['players'].items():
+                if len(v['stats']['pitching']) > 0:
+                    row = []
+                    if "MlbBoxscorePitchingID" in cols:
+                        row.append(boxscore_counter)
+                    if "MlbPlayerID" in cols:
+                        row.append(v['person']['id'])
+                    if "MlbGameID" in cols:
+                        row.append(game_id)
+                    if "AwayTeamID" in cols:
+                        row.append(away_id)
+                    if "HomeTeamID" in cols:
+                        row.append(home_id)
+                    if "IsAway" in cols:
+                        row.append(0)
+                    if "Start" in cols:
+                        row.append(v['stats']['pitching']['gamesStarted'])
+                    if "Win" in cols:
+                        if "wins" in v['stats']['pitching']:
+                            row.append(v['stats']['pitching']['wins'])
+                        else:
+                            row.append(0)
+                    if "IP" in cols:
+                        row.append(v['stats']['pitching']['inningsPitched'])
+                    if "H" in cols:
+                        row.append(v['stats']['pitching']['hits'])
+                    if "R" in cols:
+                        row.append(v['stats']['pitching']['runs'])
+                    if "ER" in cols:
+                        row.append(v['stats']['pitching']['earnedRuns'])
+                    if "ERA" in cols:
+                        row.append(v['stats']['pitching']['runsScoredPer9'])
+                    if "SO" in cols:
+                        row.append(v['stats']['pitching']['strikeOuts'])
+                    if "HR" in cols:
+                        row.append(v['stats']['pitching']['homeRuns'])
+                    if "BB" in cols:
+                        row.append(v['stats']['pitching']['baseOnBalls'])
+                    if "HBP" in cols:
+                        row.append(v['stats']['pitching']['hitBatsmen'])
+                    if "Shutout" in cols:
+                        row.append(v['stats']['pitching']['shutouts'])
+                    if "CompleteGame" in cols:
+                        row.append(v['stats']['pitching']['completeGames'])
+                    if "PitchCount" in cols:
+                        row.append(v['stats']['pitching']['pitchesThrown'])
+                    f.writerow(row)
+                    boxscore_counter += 1
+
+            for k,v in boxscore['teams']['home']['players'].items():
+                if len(v['stats']['pitching']) > 0:
+                    row = []
+                    if "MlbBoxscorePitchingID" in cols:
+                        row.append(boxscore_counter)
+                    if "MlbPlayerID" in cols:
+                        row.append(v['person']['id'])
+                    if "MlbGameID" in cols:
+                        row.append(game_id)
+                    if "AwayTeamID" in cols:
+                        row.append(away_id)
+                    if "HomeTeamID" in cols:
+                        row.append(home_id)
+                    if "IsAway" in cols:
+                        row.append(0)
+                    if "Start" in cols:
+                        row.append(v['stats']['pitching']['gamesStarted'])
+                    if "Win" in cols:
+                        if "wins" in v['stats']['pitching']:
+                            row.append(v['stats']['pitching']['wins'])
+                        else:
+                            row.append(0)
+                    if "IP" in cols:
+                        row.append(v['stats']['pitching']['inningsPitched'])
+                    if "H" in cols:
+                        row.append(v['stats']['pitching']['hits'])
+                    if "R" in cols:
+                        row.append(v['stats']['pitching']['runs'])
+                    if "ER" in cols:
+                        row.append(v['stats']['pitching']['earnedRuns'])
+                    if "ERA" in cols:
+                        row.append(v['stats']['pitching']['runsScoredPer9'])
+                    if "SO" in cols:
+                        row.append(v['stats']['pitching']['strikeOuts'])
+                    if "HR" in cols:
+                        row.append(v['stats']['pitching']['homeRuns'])
+                    if "BB" in cols:
+                        row.append(v['stats']['pitching']['baseOnBalls'])
+                    if "HBP" in cols:
+                        row.append(v['stats']['pitching']['hitBatsmen'])
+                    if "Shutout" in cols:
+                        row.append(v['stats']['pitching']['shutouts'])
+                    if "CompleteGame" in cols:
+                        row.append(v['stats']['pitching']['completeGames'])
+                    if "PitchCount" in cols:
+                        row.append(v['stats']['pitching']['pitchesThrown'])
+                    f.writerow(row)
+                    boxscore_counter += 1
+            print(str("Finished writing game " + str(game_id) + ". " + str(game_counter) + " out of " + str(len(game_ids)) + " games finished."))
+            game_counter += 1
+            sleep(randint(min_sec,max_sec))
 
 # Play By Play
 def export_pbp_data(season, cols, min_sec, max_sec, path):

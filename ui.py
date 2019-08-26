@@ -128,6 +128,14 @@ class WidgetGallery(QDialog):
                         fetch_csv.export_game_data(season, table["cols"], self.savePath)
                         self.logMessages += "Game data written to " + self.savePath + "/Game" + str(season) + ".csv\n"
                         sleep(randint(minSec, maxSec))
+                    if table["tableName"] == "MlbBoxscoreBatting":
+                        fetch_csv.export_boxscore_data(season, table["cols"], minSec, maxSec, self.savePath)
+                        self.logMessages += "Boxscore data written to " + self.savePath + "/MlbBoxscoreBatting" + str(season) + ".csv\n"
+                        sleep(randint(minSec, maxSec))
+                    if table["tableName"] == "MlbBoxscorePitching":
+                        fetch_csv.export_boxscore_pitching_data(season, table["cols"], minSec, maxSec, self.savePath)
+                        self.logMessages += "Boxscore data written to " + self.savePath + "/MlbBoxscorePitching" + str(season) + ".csv\n"
+                        sleep(randint(minSec, maxSec))
                     if table["tableName"] == "PlayByPlay":
                         fetch_csv.export_pbp_data(season, table["cols"], minSec, maxSec, self.savePath)
                         self.logMessages += "PlayByPlay data written to " + self.savePath + "/PlayByPlay" + str(season) + ".csv\n"
@@ -157,6 +165,14 @@ class WidgetGallery(QDialog):
                     if table["tableName"] == "Game":
                         fetch.export_game_data(season, table["cols"], self.savePath)
                         self.logMessages += "Game data written to " + self.savePath + "/Game" + str(season) + ".xls\n"
+                        sleep(randint(minSec, maxSec))
+                    if table["tableName"] == "MlbBoxscoreBatting":
+                        fetch.export_boxscore_data(season, table["cols"], minSec, maxSec, self.savePath)
+                        self.logMessages += "MlbBoxscoreBatting data written to " + self.savePath + "/MlbBoxscoreBatting" + str(season) + ".xls\n"
+                        sleep(randint(minSec, maxSec))
+                    if table["tableName"] == "MlbBoxscorePitching":
+                        fetch.export_boxscore_pitching_data(season, table["cols"], minSec, maxSec, self.savePath)
+                        self.logMessages += "MlbBoxscorePitching data written to " + self.savePath + "/MlbBoxscoreBatting" + str(season) + ".xls\n"
                         sleep(randint(minSec, maxSec))
                     if table["tableName"] == "PlayByPlay":
                         fetch.export_pbp_data(season, table["cols"], minSec, maxSec, self.savePath)
@@ -232,13 +248,15 @@ class WidgetGallery(QDialog):
         self.schemaTabWidget.setMinimumHeight(300)
         self.schemaTabWidget.setMinimumWidth(380)
 
-        self.tabs = ["Team", "Venue", "Player", "Schedule", "Game", "PlayByPlay"]
+        self.tabs = ["Team", "Venue", "Player", "Schedule", "Game", "MlbBoxscoreBatting", "MlbBoxscorePitching", "PlayByPlay"]
         self.props = [
-            ["TeamID", "Name", "VenueID", "Abbreviation", "LocationName", "LeagueID", "DivisionID"],
-            ["VenueID", "Name"],
-            ["PlayerID", "Season", "FullName", "FirstName", "LastName", "BirthDate", "Age", "Height", "Weight", "TeamID", "Position", "DebutDate", "BatSide", "PitchHand"],
-            ["GameID", "GameDate", "AwayTeamID", "HomeTeamID", "VenueID"],
-            ["GameID", "Season", "GameDate", "Status", "AwayTeamID", "AwayTeamScore", "AwayTeamRecordWins", "AwayTeamRecordLosses", "AwayTeamRecordPct", "HomeTeamID", "HomeTeamScore", "HomeTeamRecordWins", "HomeTeamRecordLosses", "HomeTeamRecordPct", "VenueID", "DayNight", "GamesInSeries", "SeriesGameNumber", "SeriesDescription"],
+            ["MlbTeamID", "TeamName", "MlbVenueID", "TeamAbbrev", "LocationName", "MlbLeagueID", "MlbDivisionID"],
+            ["MlbVenueID", "VenueName"],
+            ["MlbPlayerID", "Season", "FullName", "FirstName", "LastName", "BirthDate", "PlayerHeight", "PlayerWeight", "MlbTeamID", "Position", "DebutDate", "BatSide", "PitchHand"],
+            ["MlbScheduleID", "MlbGameID", "GameDateTime", "GameDate", "GameTime", "AwayTeamID", "HomeTeamID", "MlbVenueID"],
+            ["MlbGameID", "Season", "GameDateTime", "GameDate", "GameTime", "Status", "AwayTeamID", "AwayTeamScore", "AwayTeamRecordWins", "AwayTeamRecordLosses", "AwayTeamRecordPct", "HomeTeamID", "HomeTeamScore", "HomeTeamRecordWins", "HomeTeamRecordLosses", "HomeTeamRecordPct", "VenueID", "DayNight", "GamesInSeries", "SeriesGameNumber", "SeriesDescription"],
+            ["MlbBoxscoreBattingID", "MlbPlayerID", "MlbGameID", "AwayTeamID", "HomeTeamID", "IsAway", "BattingOrder", "AB", "R", "H", "2B", "3B", "HR", "RBI", "BB", "IBB", "SO", "HBP", "SH", "SF", "GDP", "SB", "CS"],
+            ["MlbBoxscorePitchingID", "MlbPlayerID", "MlbGameID", "AwayTeamID", "HomeTeamID", "IsAway", "Start", "Win", "IP", "H", "R", "ER", "ERA", "SO", "HR", "BB", "HBP", "Shutout", "CompleteGame", "PitchCount"],
             ["PlayByPlayID", "GameID", "BatterID", "BatSide", "PitcherID", "PitchHand", "MenOnBase", "Event", "EventType", "IsScoringPlay", "AwayTeamScore", "HomeTeamScore", "AtBatIndex", "HalfInning", "Inning", "Outs"]
         ]
 
