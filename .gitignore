@@ -1,2 +1,2 @@
 # Don't upload csv files (except for the example files)
-data/*.csv
+data
