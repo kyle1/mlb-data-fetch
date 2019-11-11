@@ -258,7 +258,7 @@ def export_game_data(season, cols, path):
 
 
 # Boxscore (Batting)
-def export_boxscore_data(season, cols, min_sec, max_sec, path):
+def export_boxscore_batting_data(season, cols, min_sec, max_sec, path):
     with open(path + "/MlbBoxscoreBatting" + str(season) + ".csv", mode="w", newline="\n") as f:
         f = csv.writer(f)
         f.writerow(cols)
@@ -543,6 +543,183 @@ def export_boxscore_pitching_data(season, cols, min_sec, max_sec, path):
             print(str("Finished writing game " + str(game_id) + ". " + str(game_counter) + " out of " + str(len(game_ids)) + " games finished."))
             game_counter += 1
             sleep(randint(min_sec,max_sec))
+
+
+# Boxscores (Batting & Pitching)
+def export_boxscore_data(season, cols, min_sec, max_sec, path):
+    with open(path + "/MlbBoxscore" + str(season) + ".csv", mode="w", newline="\n") as f:
+        f = csv.writer(f)
+        f.writerow(cols)
+        for date_range in date_ranges:
+            if date_range['season'] == season:
+                start_date = date_range['start_date']
+                end_date = date_range['end_date']
+
+        url = "https://statsapi.mlb.com/api/v1/schedule?startDate=" + start_date + "&endDate=" + end_date + "&sportId=1"
+        print("Getting game data from " + url)
+        games = requests.get(url).json()
+
+        # Get general game data that will be used for the boxscore records
+        url = 'https://statsapi.mlb.com/api/v1/schedule?startDate=' + start_date + '&endDate=' + end_date + '&sportId=1'
+        print('Getting game IDs and general game data from ' + url)
+        games = requests.get(url).json()
+        game_list = []
+        for date in games['dates']:
+            for game in date['games']:
+                series_desc = game['seriesDescription']
+                if 'Training' not in series_desc and 'Exhibition' not in series_desc and 'All-Star' not in series_desc and game['status']['codedGameState'] == 'F':
+                    obj = {
+                        'id': game['gamePk'],
+                        'season': int(game['season'][:4]),
+                        'away_score': game['teams']['away']['score'],
+                        'home_score': game['teams']['home']['score']
+                    }
+                    game_list.append(obj)
+
+        for game in game_list:
+            boxscore_objs = [] # Save for each game
+            game_id = game['id']
+
+            boxscore = requests.get('https://statsapi.mlb.com/api/v1/game/' + str(game_id) + '/boxscore').json()
+            
+            season = game['season']
+            away_team_id = boxscore['teams']['away']['team']['id']
+            home_team_id = boxscore['teams']['home']['team']['id']
+
+            for team in ['away', 'home']:
+                for k,v in boxscore['teams'][team]['players'].items():
+                    has_batting_stats = False
+                    has_pitching_stats = False
+
+                    if len(v['stats']['batting']) == 0 and len(v['stats']['pitching']) == 0:
+                        continue
+
+                    mlb_player_id = v['person']['id']
+                    mlb_game_id = game_id
+                    is_away = team == 'away'
+                    
+                    if game['away_score'] == game['home_score']:
+                        team_result = 'T'
+                    elif (is_away and game['away_score'] > game['home_score']) or (not is_away and game['away_score'] < game['home_score']):
+                        team_result = 'W'
+                    else:
+                        team_result = 'L'
+
+                    if 'battingOrder' in v:
+                        batting_order = int(v['battingOrder'].replace('"', ''))
+                        if batting_order % 100 == 0:
+                            batting_order = int(batting_order / 100)
+                        else:
+                            batting_order = None
+                    else:
+                        batting_order = None
+
+                    game_info = {
+                        'MlbPlayerId': mlb_player_id,
+                        'MlbGameId': mlb_game_id,
+                        'Season': season,
+                        'AwayTeamId': away_team_id,
+                        'HomeTeamId': home_team_id,
+                        'IsAway': is_away,
+                        'TeamResult': team_result,
+                        'BattingOrder': batting_order
+                    }
+
+                    if len(v['stats']['batting']) > 0:
+                        has_batting_stats = True
+
+                        at_bats = v['stats']['batting']['atBats']
+                        runs = v['stats']['batting']['runs']
+                        hits = v['stats']['batting']['hits']
+                        doubles = v['stats']['batting']['doubles']
+                        triples = v['stats']['batting']['triples']
+                        home_runs = v['stats']['batting']['homeRuns']
+                        rbi = v['stats']['batting']['rbi']
+                        bases_on_balls = v['stats']['batting']['baseOnBalls']
+                        intentional_walks = v['stats']['batting']['intentionalWalks']
+                        strikeouts = v['stats']['batting']['strikeOuts']
+                        hit_by_pitch = v['stats']['batting']['hitByPitch']
+                        sac_bunts = v['stats']['batting']['sacBunts']
+                        sac_flies = v['stats']['batting']['sacFlies']
+                        gdp = v['stats']['batting']['groundIntoDoublePlay']
+                        stolen_bases = v['stats']['batting']['stolenBases']
+                        caught_stealing = v['stats']['batting']['caughtStealing']
+
+                        batting_stats = {
+                            'AtBats': at_bats,
+                            'Runs': runs,
+                            'Hits': hits,
+                            'Doubles': doubles,
+                            'Triples': triples,
+                            'HomeRuns': home_runs,
+                            'RunsBattedIn': rbi,
+                            'BasesOnBalls': bases_on_balls,
+                            'IntentionalBasesOnBalls': intentional_walks,
+                            'Strikeouts': strikeouts,
+                            'HitByPitch': hit_by_pitch,
+                            'SacrificeHits': sac_bunts,
+                            'SacrificeFlies': sac_flies,
+                            'GroundedIntoDoublePlay': gdp,
+                            'StolenBases': stolen_bases,
+                            'CaughtStealing': caught_stealing
+                        }
+
+                    if len(v['stats']['pitching']) > 0:
+                        has_pitching_stats = True
+
+                        starting_pitcher = v['stats']['pitching']['gamesStarted']
+                        pitching_win = 'wins' in v['stats']['pitching'] and v['stats']['pitching']['wins'] == 1
+                        innings_pitched = float(v['stats']['pitching']['inningsPitched'])
+                        allowed_hits = v['stats']['pitching']['hits']
+                        allowed_runs = v['stats']['pitching']['runs']
+                        earned_runs = v['stats']['pitching']['earnedRuns']
+                        era = v['stats']['pitching']['runsScoredPer9'] if v['stats']['pitching']['runsScoredPer9'] != '-.--' else None
+                        pitched_strikeouts = v['stats']['pitching']['strikeOuts']
+                        allowed_home_runs = v['stats']['pitching']['homeRuns']
+                        allowed_bases_on_balls = v['stats']['pitching']['baseOnBalls']
+                        hit_batsmen = v['stats']['pitching']['hitBatsmen']
+                        complete_game = v['stats']['pitching']['completeGames'] == 1
+                        shutout = v['stats']['pitching']['shutouts'] == 1   
+                        quality_start = float(v['stats']['pitching']['inningsPitched']) >= 6.0 and v['stats']['pitching']['runs'] <= 3.0
+
+                        pitching_stats = {
+                            'StartingPitcher': starting_pitcher,
+                            'PitchingWin': pitching_win,
+                            'InningsPitched': innings_pitched,
+                            'AllowedHits': allowed_hits,
+                            'AllowedRuns': allowed_runs,
+                            'EarnedRuns': earned_runs,
+                            'EarnedRunAverage': era,
+                            'PitchedStrikeouts': pitched_strikeouts,
+                            'AllowedHomeRuns': allowed_home_runs,
+                            'AllowedBasesOnBalls': allowed_bases_on_balls,
+                            'BattersHitByPitch': hit_batsmen,
+                            'CompleteGame': complete_game,
+                            'Shutout': shutout,
+                            'QualityStart': quality_start
+                        }
+
+                    boxscore_obj = dict()
+                    boxscore_obj.update(game_info)
+                    if has_batting_stats:
+                        boxscore_obj.update(batting_stats)
+                    if has_pitching_stats:
+                        boxscore_obj.update(pitching_stats)
+
+                    boxscore_objs.append(boxscore_obj)
+
+            # todo
+            writing_to_csv = True
+            if writing_to_csv:
+                for boxscore_obj in boxscore_objs:
+                    row = []
+                    for k,v in boxscore_objs.items():
+                        row.append(v)
+                    f.writerow(row)                   
+            else:
+                r = requests.post(url = base_url + 'boxscores', json=boxscore_objs, verify=False)
+                sleep(randint(10,20))
+
 
 # Play By Play
 def export_pbp_data(season, cols, min_sec, max_sec, path):
